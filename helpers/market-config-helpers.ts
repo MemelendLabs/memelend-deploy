@@ -1,6 +1,6 @@
-import { getAddress } from "ethers/lib/utils";
-import { HardhatRuntimeEnvironment } from "hardhat/types";
-import Bluebird from "bluebird";
+import { getAddress } from 'ethers/lib/utils';
+import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import Bluebird from 'bluebird';
 import {
   iParamsPerNetwork,
   eNetwork,
@@ -11,19 +11,19 @@ import {
   ICommonConfiguration,
   SubTokenOutput,
   AssetType,
-} from "./types";
-import AaveMarket from "../markets/aave";
-import EthereumV3Config from "../markets/ethereum";
-import AaveTestMarket from "../markets/test";
-import HarmonyMarket from "../markets/harmony";
-import AvalancheMarket from "../markets/avalanche";
-import FantomMarket from "../markets/fantom";
-import PolygonMarket from "../markets/polygon";
-import OptimisticConfig from "../markets/optimistic";
-import ArbitrumConfig from "../markets/arbitrum";
-import BaseConfig from "../markets/base";
-import { isValidAddress } from "./utilities/utils";
-import { AaveProtocolDataProvider } from "../typechain";
+} from './types';
+import AaveMarket from '../markets/aave';
+import EthereumV3Config from '../markets/ethereum';
+import AaveTestMarket from '../markets/test';
+import HarmonyMarket from '../markets/harmony';
+import AvalancheMarket from '../markets/avalanche';
+import FantomMarket from '../markets/fantom';
+import PolygonMarket from '../markets/polygon';
+import OptimisticConfig from '../markets/optimistic';
+import ArbitrumConfig from '../markets/arbitrum';
+import BaseConfig from '../markets/base';
+import { isValidAddress } from './utilities/utils';
+import { AaveProtocolDataProvider } from '../typechain';
 import {
   ATOKEN_PREFIX,
   STABLE_DEBT_PREFIX,
@@ -32,26 +32,26 @@ import {
   TESTNET_TOKEN_PREFIX,
   TREASURY_PROXY_ID,
   VARIABLE_DEBT_PREFIX,
-} from "./deploy-ids";
-import { ZERO_ADDRESS } from "./constants";
-import { getTestnetReserveAddressFromSymbol, POOL_DATA_PROVIDER } from ".";
-import { ENABLE_REWARDS } from "./env";
+} from './deploy-ids';
+import { ZERO_ADDRESS } from './constants';
+import { getTestnetReserveAddressFromSymbol, POOL_DATA_PROVIDER } from '.';
+import { ENABLE_REWARDS } from './env';
 
 declare var hre: HardhatRuntimeEnvironment;
 
 export enum ConfigNames {
-  Commons = "Commons",
-  Aave = "Aave",
-  Test = "Test",
-  Harmony = "Harmony",
-  Avalanche = "Avalanche",
-  Fantom = "Fantom",
-  Polygon = "Polygon",
-  Optimistic = "Optimistic",
-  Arbitrum = "Arbitrum",
-  Ethereum = "Ethereum",
-  Base = "Base",
-  baseGoerli = "base-goerli",
+  Commons = 'Commons',
+  Aave = 'Aave',
+  Test = 'Test',
+  Harmony = 'Harmony',
+  Avalanche = 'Avalanche',
+  Fantom = 'Fantom',
+  Polygon = 'Polygon',
+  Optimistic = 'Optimistic',
+  Arbitrum = 'Arbitrum',
+  Ethereum = 'Ethereum',
+  Base = 'Base',
+  baseGoerli = 'base-goerli',
 }
 
 export const getParamPerNetwork = <T>(
@@ -69,8 +69,7 @@ export const getRequiredParamPerNetwork = <T>(
   network: eNetwork
 ): T => {
   const mapNetworkToValue = poolConfig[key] as iParamsPerNetwork<T>;
-  if (!mapNetworkToValue)
-    throw `[config] missing required parameter ${key} at market config`;
+  if (!mapNetworkToValue) throw `[config] missing required parameter ${key} at market config`;
 
   const value = mapNetworkToValue[network];
   if (!value) throw `[config] missing required value at ${key}.${network}`;
@@ -83,20 +82,16 @@ export const getAddressFromConfig = (
   network: eNetwork,
   key?: string
 ): tEthereumAddress => {
-  const value = getParamPerNetwork<tEthereumAddress | undefined>(
-    param,
-    network
-  );
+  const value = getParamPerNetwork<tEthereumAddress | undefined>(param, network);
   if (!value || !isValidAddress(value)) {
     throw Error(
-      `[aave-v3-deploy] Input parameter ${
-        key ? `"${key}"` : ""
-      } is missing or is not an address.`
+      `[aave-v3-deploy] Input parameter ${key ? `"${key}"` : ''} is missing or is not an address.`
     );
   }
   return value;
 };
 
+// TODO: add NEOX parameters
 export const loadPoolConfig = (configName: ConfigNames): PoolConfiguration => {
   switch (configName) {
     case ConfigNames.Aave:
@@ -130,9 +125,7 @@ export const loadPoolConfig = (configName: ConfigNames): PoolConfiguration => {
 
 export const checkRequiredEnvironment = () => {
   if (!process.env.MARKET_NAME) {
-    console.error(
-      `Skipping Market deployment due missing "MARKET_NAME" environment variable.`
-    );
+    console.error(`Skipping Market deployment due missing "MARKET_NAME" environment variable.`);
     return true;
   }
   return false;
@@ -148,13 +141,9 @@ export const savePoolTokens = async (
     dataProviderAddress
   )) as AaveProtocolDataProvider;
 
-  const aTokenArtifact = await hre.deployments.getExtendedArtifact("AToken");
-  const variableDebtTokenArtifact = await hre.deployments.getExtendedArtifact(
-    "VariableDebtToken"
-  );
-  const stableDebtTokenArtifact = await hre.deployments.getExtendedArtifact(
-    "StableDebtToken"
-  );
+  const aTokenArtifact = await hre.deployments.getExtendedArtifact('AToken');
+  const variableDebtTokenArtifact = await hre.deployments.getExtendedArtifact('VariableDebtToken');
+  const stableDebtTokenArtifact = await hre.deployments.getExtendedArtifact('StableDebtToken');
   return Bluebird.each(Object.keys(reservesConfig), async (tokenSymbol) => {
     const { aTokenAddress, variableDebtTokenAddress, stableDebtTokenAddress } =
       await dataProvider.getReserveTokensAddresses(reservesConfig[tokenSymbol]);
@@ -174,43 +163,34 @@ export const savePoolTokens = async (
   });
 };
 
-export const getReserveAddresses = async (
-  poolConfig: IBaseConfiguration,
-  network: eNetwork
-) => {
+export const getReserveAddresses = async (poolConfig: IBaseConfiguration, network: eNetwork) => {
   const isLive = hre.config.networks[network].live;
 
   if (isLive && !poolConfig.TestnetMarket) {
-    console.log("[NOTICE] Using ReserveAssets from configuration file");
+    console.log('[NOTICE] Using ReserveAssets from configuration file');
 
-    return (
-      getParamPerNetwork<ITokenAddress>(poolConfig.ReserveAssets, network) || {}
-    );
+    return getParamPerNetwork<ITokenAddress>(poolConfig.ReserveAssets, network) || {};
   }
   console.log(
-    "[WARNING] Using deployed Testnet tokens instead of ReserveAssets from configuration file"
+    '[WARNING] Using deployed Testnet tokens instead of ReserveAssets from configuration file'
   );
   const reservesKeys = Object.keys(poolConfig.ReservesConfig);
   const allDeployments = await hre.deployments.all();
   const testnetTokenKeys = Object.keys(allDeployments).filter(
     (key) =>
       key.includes(TESTNET_TOKEN_PREFIX) &&
-      reservesKeys.includes(key.replace(TESTNET_TOKEN_PREFIX, ""))
+      reservesKeys.includes(key.replace(TESTNET_TOKEN_PREFIX, ''))
   );
   return testnetTokenKeys.reduce<ITokenAddress>((acc, key) => {
-    const symbol = key.replace(TESTNET_TOKEN_PREFIX, "");
+    const symbol = key.replace(TESTNET_TOKEN_PREFIX, '');
     acc[symbol] = allDeployments[key].address;
     return acc;
   }, {});
 };
 
-export const getSubTokensByPrefix = async (
-  prefix: string
-): Promise<SubTokenOutput[]> => {
+export const getSubTokensByPrefix = async (prefix: string): Promise<SubTokenOutput[]> => {
   const allDeployments = await hre.deployments.all();
-  const tokenKeys = Object.keys(allDeployments).filter((key) =>
-    key.includes(prefix)
-  );
+  const tokenKeys = Object.keys(allDeployments).filter((key) => key.includes(prefix));
 
   if (!tokenKeys.length) {
     return [];
@@ -218,7 +198,7 @@ export const getSubTokensByPrefix = async (
 
   return tokenKeys.reduce<SubTokenOutput[]>((acc, key) => {
     acc.push({
-      symbol: key.replace(prefix, ""),
+      symbol: key.replace(prefix, ''),
       artifact: allDeployments[key],
     });
     return acc;
@@ -227,37 +207,27 @@ export const getSubTokensByPrefix = async (
 
 export const getSymbolsByPrefix = async (prefix: string): Promise<string[]> => {
   const allDeployments = await hre.deployments.all();
-  const tokenKeys = Object.keys(allDeployments).filter((key) =>
-    key.includes(prefix)
-  );
+  const tokenKeys = Object.keys(allDeployments).filter((key) => key.includes(prefix));
 
   if (!tokenKeys.length) {
     return [];
   }
 
   return tokenKeys.reduce<string[]>((acc, key) => {
-    acc.push(key.replace(prefix, ""));
+    acc.push(key.replace(prefix, ''));
     return acc;
   }, []);
 };
 
-export const getChainlinkOracles = async (
-  poolConfig: IBaseConfiguration,
-  network: eNetwork
-) => {
+export const getChainlinkOracles = async (poolConfig: IBaseConfiguration, network: eNetwork) => {
   const isLive = hre.config.networks[network].live;
   if (isLive) {
-    console.log("[NOTICE] Using ChainlinkAggregator from configuration file");
+    console.log('[NOTICE] Using ChainlinkAggregator from configuration file');
 
-    return (
-      getParamPerNetwork<ITokenAddress>(
-        poolConfig.ChainlinkAggregator,
-        network
-      ) || {}
-    );
+    return getParamPerNetwork<ITokenAddress>(poolConfig.ChainlinkAggregator, network) || {};
   }
   console.log(
-    "[WARNING] Using deployed Mock Price Aggregators instead of ChainlinkAggregator from configuration file"
+    '[WARNING] Using deployed Mock Price Aggregators instead of ChainlinkAggregator from configuration file'
   );
   let rewardKeys: string[] = [];
 
@@ -270,11 +240,11 @@ export const getChainlinkOracles = async (
   const testnetKeys = Object.keys(allDeployments).filter(
     (key) =>
       key.includes(TESTNET_PRICE_AGGR_PREFIX) &&
-      (reservesKeys.includes(key.replace(TESTNET_PRICE_AGGR_PREFIX, "")) ||
-        rewardKeys.includes(key.replace(TESTNET_PRICE_AGGR_PREFIX, "")))
+      (reservesKeys.includes(key.replace(TESTNET_PRICE_AGGR_PREFIX, '')) ||
+        rewardKeys.includes(key.replace(TESTNET_PRICE_AGGR_PREFIX, '')))
   );
   return testnetKeys.reduce<ITokenAddress>((acc, key) => {
-    const symbol = key.replace(TESTNET_PRICE_AGGR_PREFIX, "");
+    const symbol = key.replace(TESTNET_PRICE_AGGR_PREFIX, '');
     acc[symbol] = allDeployments[key].address;
     return acc;
   }, {});
@@ -289,15 +259,12 @@ export const getTreasuryAddress = async (
     network
   );
 
-  if (
-    treasuryConfigAddress &&
-    getAddress(treasuryConfigAddress) !== getAddress(ZERO_ADDRESS)
-  ) {
+  if (treasuryConfigAddress && getAddress(treasuryConfigAddress) !== getAddress(ZERO_ADDRESS)) {
     return treasuryConfigAddress;
   }
 
   console.log(
-    "[WARNING] Using latest deployed Treasury proxy instead of ReserveFactorTreasuryAddress from configuration file"
+    '[WARNING] Using latest deployed Treasury proxy instead of ReserveFactorTreasuryAddress from configuration file'
   );
 
   const deployedTreasury = await hre.deployments.get(TREASURY_PROXY_ID);
@@ -305,12 +272,8 @@ export const getTreasuryAddress = async (
   return deployedTreasury.address;
 };
 
-export const isProductionMarket = (
-  poolConfig: ICommonConfiguration
-): boolean => {
-  const network = (
-    process.env.FORK ? process.env.FORK : hre.network.name
-  ) as eNetwork;
+export const isProductionMarket = (poolConfig: ICommonConfiguration): boolean => {
+  const network = (process.env.FORK ? process.env.FORK : hre.network.name) as eNetwork;
 
   return hre.config.networks[network]?.live && !poolConfig.TestnetMarket;
 };
@@ -318,13 +281,8 @@ export const isProductionMarket = (
 export const isTestnetMarket = (poolConfig: ICommonConfiguration): boolean =>
   !isProductionMarket(poolConfig);
 
-export const getReserveAddress = async (
-  poolConfig: ICommonConfiguration,
-  symbol: string
-) => {
-  const network = (
-    process.env.FORK ? process.env.FORK : hre.network.name
-  ) as eNetwork;
+export const getReserveAddress = async (poolConfig: ICommonConfiguration, symbol: string) => {
+  const network = (process.env.FORK ? process.env.FORK : hre.network.name) as eNetwork;
 
   if (isTestnetMarket(poolConfig)) {
     return await getTestnetReserveAddressFromSymbol(symbol);
@@ -341,16 +299,10 @@ export const getReserveAddress = async (
   return assetAddress;
 };
 
-export const getOracleByAsset = async (
-  poolConfig: ICommonConfiguration,
-  symbol: string
-) => {
-  const network = (
-    process.env.FORK ? process.env.FORK : hre.network.name
-  ) as eNetwork;
+export const getOracleByAsset = async (poolConfig: ICommonConfiguration, symbol: string) => {
+  const network = (process.env.FORK ? process.env.FORK : hre.network.name) as eNetwork;
   if (isTestnetMarket(poolConfig)) {
-    return (await hre.deployments.get(`${symbol}${TESTNET_PRICE_AGGR_PREFIX}`))
-      .address;
+    return (await hre.deployments.get(`${symbol}${TESTNET_PRICE_AGGR_PREFIX}`)).address;
   }
   const oracleAddress = poolConfig.ChainlinkAggregator[network]?.[symbol];
 
@@ -362,9 +314,7 @@ export const getOracleByAsset = async (
 };
 
 export const isL2PoolSupported = (poolConfig: ICommonConfiguration) => {
-  const network = (
-    process.env.FORK ? process.env.FORK : hre.network.name
-  ) as eNetwork;
+  const network = (process.env.FORK ? process.env.FORK : hre.network.name) as eNetwork;
 
   return !!getParamPerNetwork<boolean>(poolConfig.L2PoolEnabled, network);
 };
@@ -381,9 +331,7 @@ export const getPrefixByAssetType = (assetType: AssetType) => {
 };
 
 export const isIncentivesEnabled = (poolConfig: ICommonConfiguration) => {
-  const network = (
-    process.env.FORK ? process.env.FORK : hre.network.name
-  ) as eNetwork;
+  const network = (process.env.FORK ? process.env.FORK : hre.network.name) as eNetwork;
 
   if (ENABLE_REWARDS !== undefined) {
     return !!ENABLE_REWARDS;

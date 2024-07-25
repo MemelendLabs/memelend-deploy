@@ -1,6 +1,5 @@
-import { eOptimismNetwork } from './../../helpers/types';
 import { ZERO_ADDRESS } from '../../helpers';
-import { IAaveConfiguration, eEthereumNetwork, eArbitrumNetwork } from '../../helpers/types';
+import { IAaveConfiguration, eEthereumNetwork } from '../../helpers/types';
 
 import { CommonsConfig } from './commons';
 import {
@@ -17,14 +16,14 @@ import {
 // ----------------
 // POOL--SPECIFIC PARAMS
 // ----------------
-// TODO: add NEOx pool configuration
-export const AaveMarket: IAaveConfiguration = {
+// TODO: add Intersect pool configuration
+export const IntersectMarket: IAaveConfiguration = {
   ...CommonsConfig,
-  MarketId: 'Ethereum Aave Market',
-  ATokenNamePrefix: 'Ethereum',
-  StableDebtTokenNamePrefix: 'Ethereum',
-  VariableDebtTokenNamePrefix: 'Ethereum',
-  SymbolPrefix: 'Eth',
+  MarketId: 'NeoX Intersect Market',
+  ATokenNamePrefix: 'Intersect',
+  StableDebtTokenNamePrefix: 'Intersect',
+  VariableDebtTokenNamePrefix: 'Intersect',
+  SymbolPrefix: 'Its',
   ProviderId: 30,
   ReservesConfig: {
     DAI: strategyDAI,
@@ -63,4 +62,4 @@ export const AaveMarket: IAaveConfiguration = {
   },
 };
 
-export default AaveMarket;
+export default IntersectMarket;

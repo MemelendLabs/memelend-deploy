@@ -1,8 +1,8 @@
-import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { DeployFunction } from "hardhat-deploy/types";
-import { PoolAddressesProviderRegistry } from "../../typechain";
-import { waitForTx } from "../../helpers/utilities/tx";
-import { COMMON_DEPLOY_PARAMS } from "../../helpers/env";
+import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import { DeployFunction } from 'hardhat-deploy/types';
+import { PoolAddressesProviderRegistry } from '../../typechain';
+import { waitForTx } from '../../helpers/utilities/tx';
+import { COMMON_DEPLOY_PARAMS } from '../../helpers/env';
 
 const func: DeployFunction = async function ({
   getNamedAccounts,
@@ -11,15 +11,15 @@ const func: DeployFunction = async function ({
 }: HardhatRuntimeEnvironment) {
   const { deploy } = deployments;
   const { deployer, addressesProviderRegistryOwner } = await getNamedAccounts();
+  console.log(hre.ethers.provider);
+  console.log(await hre.ethers.provider.getFeeData());
+  console.log(await hre.ethers.provider.getGasPrice());
 
-  const poolAddressesProviderRegistryArtifact = await deploy(
-    "PoolAddressesProviderRegistry",
-    {
-      from: deployer,
-      args: [deployer],
-      ...COMMON_DEPLOY_PARAMS,
-    }
-  );
+  const poolAddressesProviderRegistryArtifact = await deploy('PoolAddressesProviderRegistry', {
+    from: deployer,
+    args: [deployer],
+    ...COMMON_DEPLOY_PARAMS,
+  });
 
   const registryInstance = (
     (await hre.ethers.getContractAt(
@@ -28,9 +28,7 @@ const func: DeployFunction = async function ({
     )) as PoolAddressesProviderRegistry
   ).connect(await hre.ethers.getSigner(deployer));
 
-  await waitForTx(
-    await registryInstance.transferOwnership(addressesProviderRegistryOwner)
-  );
+  await waitForTx(await registryInstance.transferOwnership(addressesProviderRegistryOwner));
 
   deployments.log(
     `[Deployment] Transferred ownership of PoolAddressesProviderRegistry to: ${addressesProviderRegistryOwner} `
@@ -38,7 +36,7 @@ const func: DeployFunction = async function ({
   return true;
 };
 
-func.id = "PoolAddressesProviderRegistry";
-func.tags = ["core", "registry"];
+func.id = 'PoolAddressesProviderRegistry';
+func.tags = ['core', 'registry'];
 
 export default func;
