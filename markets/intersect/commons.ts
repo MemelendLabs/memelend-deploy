@@ -12,9 +12,10 @@ import {
 import { ZERO_ADDRESS } from '../../helpers/constants';
 import { ICommonConfiguration, eEthereumNetwork, eArbitrumNetwork } from '../../helpers/types';
 import {
-  rateStrategyStableOne,
-  rateStrategyStableTwo,
-  rateStrategyVolatileOne,
+  rateStrategySafeFive,
+  rateStrategyNeutralTen,
+  rateStrategyRiskyTwenty,
+  rateStrategyNoBorrow,
 } from './rateStrategies';
 // ----------------
 // PROTOCOL GLOBAL PARAMS
@@ -25,12 +26,12 @@ export const CommonsConfig: ICommonConfiguration = {
   ATokenNamePrefix: 'Intersect',
   StableDebtTokenNamePrefix: 'Intersect',
   VariableDebtTokenNamePrefix: 'Intersect',
-  SymbolPrefix: 'Its',
+  SymbolPrefix: 'In',
   ProviderId: 8080,
   OracleQuoteCurrencyAddress: ZERO_ADDRESS,
   OracleQuoteCurrency: 'USD',
   OracleQuoteUnit: '8',
-  WrappedNativeTokenSymbol: 'WNeox',
+  WrappedNativeTokenSymbol: 'WGAS',
   ChainlinkAggregator: {
     // TODO: Add Chainlink Aggregator addresses
     [eNeoXNetwork.main]: {},
@@ -162,7 +163,6 @@ export const CommonsConfig: ICommonConfiguration = {
     },
   },
   L2PoolEnabled: {
-    // TODO: is this required?
     [eArbitrumNetwork.arbitrum]: true,
     [eArbitrumNetwork.goerliNitro]: true,
     [eArbitrumNetwork.arbitrumTestnet]: true,
@@ -170,6 +170,7 @@ export const CommonsConfig: ICommonConfiguration = {
     [eOptimismNetwork.testnet]: true,
     [eBaseNetwork.base]: true,
     [eBaseNetwork.baseGoerli]: true,
+    [eNeoXNetwork.testnet]: true,
   },
   ParaswapRegistry: {
     [eEthereumNetwork.main]: '0xa68bEA62Dc4034A689AA0F58A76681433caCa663',
@@ -187,8 +188,9 @@ export const CommonsConfig: ICommonConfiguration = {
     protocol: 0.0004e4,
   },
   RateStrategies: {
-    rateStrategyVolatileOne,
-    rateStrategyStableOne,
-    rateStrategyStableTwo,
+    rateStrategySafeFive,
+    rateStrategyNeutralTen,
+    rateStrategyRiskyTwenty,
+    rateStrategyNoBorrow,
   },
 };

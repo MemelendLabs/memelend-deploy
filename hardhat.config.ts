@@ -27,7 +27,7 @@ import '@nomicfoundation/hardhat-chai-matchers';
 import '@nomiclabs/hardhat-etherscan';
 
 const SKIP_LOAD = process.env.SKIP_LOAD === 'true';
-const TASK_FOLDERS = ['misc', 'market-registry'];
+const TASK_FOLDERS = ['misc', 'market-registry', 'intersect'];
 
 // Prevent to load tasks before compilation and typechain
 if (!SKIP_LOAD) {
@@ -171,7 +171,9 @@ export default {
   },
   deterministicDeployment: DETERMINISTIC_DEPLOYMENT ? DETERMINISTIC_FACTORIES : undefined,
   etherscan: {
-    apiKey: ETHERSCAN_KEY,
+    apiKey: {
+      [eNeoXNetwork.testnet]: 'notneeded',
+    },
     customChains: [
       {
         network: eBaseNetwork.base,
@@ -179,6 +181,14 @@ export default {
         urls: {
           apiURL: 'https://api.basescan.org/api',
           browserURL: 'https://basescan.org/',
+        },
+      },
+      {
+        network: eNeoXNetwork.testnet,
+        chainId: 12227332,
+        urls: {
+          apiURL: 'https://neoxt4seed1.ngd.network',
+          browserURL: 'https://xt4scan.ngd.network',
         },
       },
     ],
