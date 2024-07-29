@@ -5,6 +5,7 @@ import { getPool } from '../../helpers';
 const POOL_ADDRESS = '0x88F4E76115e210c5f12B2b740fADf062E422B27F';
 
 // npx hardhat --network neoX-testnet intersect:supply --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --behalf '' --referral 0 --amount 1000000;
+// npx hardhat --network neoX-testnet intersect:supply --asset 0x646212B2cbdA223eE82C409F50d9EaA790Efa551 --behalf '' --referral 0 --amount 1000000;
 task('intersect:supply', 'Supply tokens to the pool')
   .addParam('asset', 'The address of the asset')
   .addParam('amount', 'The amount of asset to supply')
@@ -14,10 +15,10 @@ task('intersect:supply', 'Supply tokens to the pool')
     const poolContract = await getPool(POOL_ADDRESS);
 
     // approve the supply allowance first
-    const token = await hre.ethers.getContractAt('TestnetERC20', asset);
-    const balance = await token.balanceOf(behalf);
-    console.log(`Balance of ${behalf} is ${balance}`);
-    await token.approve(poolContract.address, amount);
+    const ethers = hre.ethers;
+    const token = await ethers.getContractAt('TestnetERC20', asset);
+    const amountBN = ethers.BigNumber.from(amount);
+    await token.approve(poolContract.address, amountBN);
 
     if (!behalf) {
       const [signer] = await hre.ethers.getSigners();
@@ -40,11 +41,13 @@ task('intersect:withdraw', 'Withdraw tokens from the pool')
       const [signer] = await hre.ethers.getSigners();
       to = signer.address;
     }
+    const amountBN = hre.ethers.BigNumber.from(amount);
 
-    const txRes = await poolContract.withdraw(asset, amount, to);
+    const txRes = await poolContract.withdraw(asset, amountBN, to);
     console.log(txRes);
   });
 
+// npx hardhat --network neoX-testnet intersect:borrow --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --amount 100000 --mode 0 --referral 0 --behalf '';
 // npx hardhat --network neoX-testnet intersect:borrow --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --amount 100000 --mode 0 --referral 0 --behalf '';
 task('intersect:borrow', 'Borrow tokens from the pool')
   .addParam('asset', 'The address of the asset')
@@ -60,8 +63,10 @@ task('intersect:borrow', 'Borrow tokens from the pool')
       behalf = signer.address;
     }
 
+    const amountBN = hre.ethers.BigNumber.from(amount);
+
     console.log(mode);
-    const txRes = await poolContract.borrow(asset, amount, mode, referral, behalf);
+    const txRes = await poolContract.borrow(asset, amountBN, mode, referral, behalf);
     console.log(txRes);
   });
 
@@ -78,8 +83,9 @@ task('intersect:repay', 'Repay borrowed tokens to the pool')
       const [signer] = await hre.ethers.getSigners();
       behalf = signer.address;
     }
+    const amountBN = hre.ethers.BigNumber.from(amount);
 
-    const txRes = await poolContract.repay(asset, amount, mode, behalf);
+    const txRes = await poolContract.repay(asset, amountBN, mode, behalf);
     console.log(txRes);
   });
 
@@ -90,7 +96,9 @@ task('intersect:repayWithATokens', 'Repay borrowed tokens with aTokens to the po
   .setAction(async ({ asset, amount, mode }, hre) => {
     const poolContract = await getPool(POOL_ADDRESS);
 
-    const txRes = await poolContract.repayWithATokens(asset, amount, mode);
+    const amountBN = hre.ethers.BigNumber.from(amount);
+
+    const txRes = await poolContract.repayWithATokens(asset, amountBN, mode);
     console.log(txRes);
   });
 
@@ -113,7 +121,8 @@ task('intersect:liquidationCall', 'Liquidate a position')
     console.log(txRes);
   });
 
-task('intersect:getUserConfiguration', 'Get user configuration')
+// npx hardhat --network neoX-testnet intersect:getUserDetails --user '';
+task('intersect:getUserDetails', 'Get user configuration')
   .addParam('user', 'The address of the user')
   .setAction(async ({ user }, hre) => {
     const poolContract = await getPool(POOL_ADDRESS);
@@ -124,5 +133,7 @@ task('intersect:getUserConfiguration', 'Get user configuration')
     }
 
     const userConfig = await poolContract.getUserAccountData(user);
-    console.log(userConfig);
+    console.log('account data', userConfig);
+    const userData = await poolContract.getUserConfiguration(user);
+    console.log('account config', userData);
   });

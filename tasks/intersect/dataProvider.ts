@@ -36,6 +36,17 @@ task('intersect:getReserveConfig', 'Get reserve configuration for the asset')
     console.log(reserveConfig);
   });
 
+// npx hardhat --network neoX-testnet intersect:totalAssetDebt --provider 0x2bB8545CC96783A7929840640312F598015cC45A --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29;
+task('intersect:totalAssetDebt', 'Get total debt of the asset')
+  .addParam('provider', 'The address of the poolDataProvider')
+  .addParam('asset', 'The address of the asset')
+  .setAction(async ({ provider, asset }, hre) => {
+    const dataProvider = await getAaveProtocolDataProvider(provider);
+    const reserveConfig = await dataProvider.getTotalDebt(asset);
+
+    console.log(reserveConfig);
+  });
+
 //  npx hardhat --network neoX-testnet intersect:getUserReserveData --provider 0x2bB8545CC96783A7929840640312F598015cC45A --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --user ''
 task('intersect:getUserReserveData', 'Get user data for a given reserve')
   .addParam('provider', 'The address of the poolDataProvider')
