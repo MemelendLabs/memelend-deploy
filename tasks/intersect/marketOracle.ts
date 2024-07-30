@@ -1,5 +1,5 @@
 import { task } from 'hardhat/config';
-import { getAaveOracle } from '../../helpers';
+import { getAaveOracle, waitForTx } from '../../helpers';
 
 // npx hardhat --network neoX-testnet intersect:addAssetSource --oracle 0xE080C52Ac53173A5615bCDd6AB1cD6d85B1500C7 --asset 0x646212B2cbdA223eE82C409F50d9EaA790Efa551 --source 0x3E0c6a7bE84F5B9CA740f3E2CeaC03f451Bb80cf;
 task('intersect:addAssetSource', 'Add asset source to the market')
@@ -11,7 +11,7 @@ task('intersect:addAssetSource', 'Add asset source to the market')
 
     // const marketContract = await ethers.getContractAt('Market', asset, signer);
     // const res = await marketContract.addAssetSource(source);
-    const res = await marketOracle.setAssetSources([asset], [source]);
+    const res = await waitForTx(await marketOracle.setAssetSources([asset], [source]));
 
     console.log(res);
 

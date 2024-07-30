@@ -1,5 +1,5 @@
 import { task } from 'hardhat/config';
-import { getPool } from '../../helpers';
+import { getPool, waitForTx } from '../../helpers';
 
 // address of the proxy pool contract
 const POOL_ADDRESS = '0x88F4E76115e210c5f12B2b740fADf062E422B27F';
@@ -18,14 +18,15 @@ task('intersect:supply', 'Supply tokens to the pool')
     const ethers = hre.ethers;
     const token = await ethers.getContractAt('TestnetERC20', asset);
     const amountBN = ethers.BigNumber.from(amount);
-    await token.approve(poolContract.address, amountBN);
+    await waitForTx(await token.approve(poolContract.address, amountBN));
+    console.log('Approved supply allowance');
 
     if (!behalf) {
       const [signer] = await hre.ethers.getSigners();
       behalf = signer.address;
     }
 
-    const txRes = await poolContract.supply(asset, amount, behalf, referral);
+    const txRes = await waitForTx(await poolContract.supply(asset, amount, behalf, referral));
     console.log(txRes);
   });
 
@@ -43,12 +44,12 @@ task('intersect:withdraw', 'Withdraw tokens from the pool')
     }
     const amountBN = hre.ethers.BigNumber.from(amount);
 
-    const txRes = await poolContract.withdraw(asset, amountBN, to);
+    const txRes = await waitForTx(await poolContract.withdraw(asset, amountBN, to));
     console.log(txRes);
   });
 
-// npx hardhat --network neoX-testnet intersect:borrow --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --amount 100000 --mode 0 --referral 0 --behalf '';
-// npx hardhat --network neoX-testnet intersect:borrow --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --amount 100000 --mode 0 --referral 0 --behalf '';
+// npx hardhat --network neoX-testnet intersect:borrow --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --amount 100000 --mode 2 --referral 0 --behalf '';
+// npx hardhat --network neoX-testnet intersect:borrow --asset 0x646212B2cbdA223eE82C409F50d9EaA790Efa551 --amount 100000 --mode 2 --referral 0 --behalf '';
 task('intersect:borrow', 'Borrow tokens from the pool')
   .addParam('asset', 'The address of the asset')
   .addParam('amount', 'The amount of the asset')
@@ -66,11 +67,13 @@ task('intersect:borrow', 'Borrow tokens from the pool')
     const amountBN = hre.ethers.BigNumber.from(amount);
 
     console.log(mode);
-    const txRes = await poolContract.borrow(asset, amountBN, mode, referral, behalf);
+    const txRes = await waitForTx(
+      await poolContract.borrow(asset, amountBN, mode, referral, behalf)
+    );
     console.log(txRes);
   });
 
-// npx hardhat --network neoX-testnet intersect:repay --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --amount 100000 --mode 0 --referral 0 --behalf '';
+// npx hardhat --network neoX-testnet intersect:repay --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --amount 100000 --mode 2 --behalf '';
 task('intersect:repay', 'Repay borrowed tokens to the pool')
   .addParam('asset', 'The address of the asset')
   .addParam('amount', 'The amount of the asset')
@@ -85,10 +88,16 @@ task('intersect:repay', 'Repay borrowed tokens to the pool')
     }
     const amountBN = hre.ethers.BigNumber.from(amount);
 
-    const txRes = await poolContract.repay(asset, amountBN, mode, behalf);
+    const token = await hre.ethers.getContractAt('TestnetERC20', asset);
+    await waitForTx(await token.approve(poolContract.address, amountBN));
+    console.log('Approved supply allowance');
+
+    const txRes = await waitForTx(await poolContract.repay(asset, amountBN, mode, behalf));
     console.log(txRes);
   });
 
+// npx hardhat --show-stack-traces --network neoX-testnet intersect:repayWithATokens --asset 0x646212B2cbdA223eE82C409F50d9EaA790Efa551 --amount 4 --mode 2
+// NOTE: you need to have ATokens ie already lending the asset of the debt you want to repay
 task('intersect:repayWithATokens', 'Repay borrowed tokens with aTokens to the pool')
   .addParam('asset', 'The address of the asset')
   .addParam('amount', 'The amount of the asset')
@@ -98,7 +107,7 @@ task('intersect:repayWithATokens', 'Repay borrowed tokens with aTokens to the po
 
     const amountBN = hre.ethers.BigNumber.from(amount);
 
-    const txRes = await poolContract.repayWithATokens(asset, amountBN, mode);
+    const txRes = await waitForTx(await poolContract.repayWithATokens(asset, amountBN, mode));
     console.log(txRes);
   });
 
@@ -111,12 +120,8 @@ task('intersect:liquidationCall', 'Liquidate a position')
   .setAction(async ({ collateral, debt, user, covering, receiveAToken }, hre) => {
     const poolContract = await getPool(POOL_ADDRESS);
 
-    const txRes = await poolContract.liquidationCall(
-      collateral,
-      debt,
-      user,
-      covering,
-      receiveAToken
+    const txRes = await waitForTx(
+      await poolContract.liquidationCall(collateral, debt, user, covering, receiveAToken)
     );
     console.log(txRes);
   });
@@ -136,4 +141,14 @@ task('intersect:getUserDetails', 'Get user configuration')
     console.log('account data', userConfig);
     const userData = await poolContract.getUserConfiguration(user);
     console.log('account config', userData);
+  });
+
+// npx hardhat --network neoX-testnet intersect:getReserveFromPool --asset 0x6Ab8ce882d34eE414E09C8C8Fd4715c45592F923;
+task('intersect:getReserveFromPool', 'Get reserver data from the pool')
+  .addParam('asset', 'The address of the asset')
+  .setAction(async ({ asset }, hre) => {
+    const poolContract = await getPool(POOL_ADDRESS);
+
+    const reserveData = await poolContract.getReserveData(asset);
+    console.log('reserve data', reserveData);
   });

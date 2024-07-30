@@ -1,7 +1,7 @@
 import { task } from 'hardhat/config';
 import { getAaveProtocolDataProvider } from '../../helpers';
 
-// npx hardhat --network neoX-testnet intersect:getAllPoolTokenData --provider 0x2bB8545CC96783A7929840640312F598015cC45A;npx hardhat --network neoX-testnet intersect:getPoolTokenData --provider 0x2bB8545CC96783A7929840640312F598015cC45A
+// npx hardhat --network neoX-testnet intersect:getAllPoolTokenData --provider 0x2bB8545CC96783A7929840640312F598015cC45A
 task('intersect:getAllPoolTokenData', 'Get all tokens for the pool')
   .addParam('provider', 'The address of the poolDataProvider')
   .setAction(async ({ provider }, hre) => {
@@ -63,4 +63,16 @@ task('intersect:getUserReserveData', 'Get user data for a given reserve')
     const userData = await dataProvider.getUserReserveData(asset, user);
 
     console.log(userData);
+  });
+
+//  npx hardhat --network neoX-testnet intersect:getReserveTokenAddresses --provider 0x2bB8545CC96783A7929840640312F598015cC45A --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29
+task('intersect:getReserveTokenAddresses', 'Gets the token addresses for a reserve')
+  .addParam('provider', 'The address of the poolDataProvider')
+  .addParam('asset', 'The address of the asset')
+  .setAction(async ({ provider, asset }, hre) => {
+    const dataProvider = await getAaveProtocolDataProvider(provider);
+
+    const tokenAddresses = await dataProvider.getReserveTokensAddresses(asset);
+
+    console.log(tokenAddresses);
   });
