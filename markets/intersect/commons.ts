@@ -155,11 +155,19 @@ export const CommonsConfig: ICommonConfiguration = {
   EModes: {
     StableEMode: {
       id: '1',
-      ltv: '9700',
-      liquidationThreshold: '9750',
-      liquidationBonus: '10100',
-      label: 'Stablecoins',
-      assets: ['USDC', 'USDT', 'DAI', 'EURS'],
+      ltv: '9300',
+      liquidationThreshold: '9500',
+      liquidationBonus: '10000',
+      label: 'Stablecoin',
+      assets: ['USDC', 'USDT'],
+    },
+    ETH: {
+      id: '2',
+      ltv: '9300',
+      liquidationThreshold: '9500',
+      liquidationBonus: '10000',
+      label: 'Stablecoin',
+      assets: ['WETH', 'WSTETH'],
     },
   },
   L2PoolEnabled: {

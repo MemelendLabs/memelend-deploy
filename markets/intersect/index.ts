@@ -4,13 +4,14 @@ import { IAaveConfiguration, eNeoXNetwork } from '../../helpers/types';
 import { CommonsConfig } from './commons';
 import {
   strategySWTH,
-  strategyGAS,
+  strategyWGAS,
   strategyNEO,
   strategyUSDC,
   strategyUSDT,
   strategyWBTC,
   strategyWETH,
   strategyWSTETH,
+  strategyDAI,
 } from './reservesConfigs';
 
 // ----------------
@@ -29,18 +30,18 @@ export const IntersectMarket: IAaveConfiguration = {
     // Add the reserve strategy
     SWTH: strategySWTH,
     NEO: strategyNEO,
-    GAS: strategyGAS,
+    WGAS: strategyWGAS,
     USDC: strategyUSDC,
     USDT: strategyUSDT,
     WBTC: strategyWBTC,
     WETH: strategyWETH,
     WSTETH: strategyWSTETH,
+    DIA: strategyDAI, // for testing purposes
   },
   ReserveAssets: {
     // Link the actual underlying assets, if not specified mintable asset will be deployed
     [eNeoXNetwork.testnet]: {
-      // AAVE: ZERO_ADDRESS,
-      // DAI: ZERO_ADDRESS,
+      DAI: '0xfd49bEe9a0015743f4f1ce493804b203eca76f29', // for testing purposes, already deployed on testnet
       // LINK: ZERO_ADDRESS,
       // USDC: ZERO_ADDRESS,
       // WBTC: ZERO_ADDRESS,
