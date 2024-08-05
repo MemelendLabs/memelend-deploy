@@ -36,7 +36,7 @@ export const IntersectMarket: IAaveConfiguration = {
     WBTC: strategyWBTC,
     WETH: strategyWETH,
     WSTETH: strategyWSTETH,
-    DIA: strategyDAI, // for testing purposes
+    DAI: strategyDAI, // for testing purposes
   },
   ReserveAssets: {
     // Link the actual underlying assets, if not specified mintable asset will be deployed

@@ -21,6 +21,7 @@ import FantomMarket from '../markets/fantom';
 import PolygonMarket from '../markets/polygon';
 import OptimisticConfig from '../markets/optimistic';
 import ArbitrumConfig from '../markets/arbitrum';
+import IntersectMarket from '../markets/intersect';
 import BaseConfig from '../markets/base';
 import { isValidAddress } from './utilities/utils';
 import { AaveProtocolDataProvider } from '../typechain';
@@ -52,6 +53,7 @@ export enum ConfigNames {
   Ethereum = 'Ethereum',
   Base = 'Base',
   baseGoerli = 'base-goerli',
+  Intersect = 'Intersect',
 }
 
 export const getParamPerNetwork = <T>(
@@ -112,6 +114,8 @@ export const loadPoolConfig = (configName: ConfigNames): PoolConfiguration => {
       return ArbitrumConfig;
     case ConfigNames.Ethereum:
       return EthereumV3Config;
+    case ConfigNames.Intersect:
+      return IntersectMarket;
     case ConfigNames.Base:
       return BaseConfig;
     default:
