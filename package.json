@@ -20,7 +20,7 @@
   "main": "dist/helpers/index.js",
   "devDependencies": {
     "@aave/aave-token": "^1.0.4",
-    "@aave/core-v3": "^1.19.3",
+    "@aave/core-v3": "git+https://github.com/IntersectLabs/intersect-core",
     "@aave/periphery-v3": "^2.5.2",
     "@aave/safety-module": "^1.0.3",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.5",
