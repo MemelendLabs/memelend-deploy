@@ -14,7 +14,7 @@ task('checkFaucet', 'Query the faucet params')
     console.log('Owner of faucet is :', owner);
   });
 
-// npx hardhat --network neoX-testnet intersect:mintToken --faucet 0x86d958A24452af1aFFFd58dA461ea52b71ba410c --token 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --to '' --amount 200000000000000000000
+// npx hardhat --network neoX-testnet intersect:mintToken --faucet 0x6bEff72Fe5262eDe32aEC2323DD086A5C3E62B18 --token 0x0fD30BA2Ff7bc336ddaBfb4a4fEE63D0b68b0327 --to '' --amount 200000000000000000000
 task('intersect:mintToken', 'Mint asset through faucet')
   .addParam('faucet', 'The address of faucet')
   .addParam('token', 'The address of token')
@@ -28,7 +28,7 @@ task('intersect:mintToken', 'Mint asset through faucet')
       to = signer.address;
     }
 
-    const amountBN = ethers.BigNumber.from(amount).mul(ethers.BigNumber.from(10).pow(18));
+    const amountBN = ethers.BigNumber.from(amount);
 
     const faucetContract = await getFaucet(faucet);
     const res = await faucetContract.mint(token, to, amountBN);

@@ -1,33 +1,27 @@
-import { POOL_ADMIN } from "./../../helpers/constants";
-import { getProxyImplementationBySlot } from "./../../helpers/utilities/tx";
-import { getFirstSigner } from "./../../helpers/utilities/signer";
-import { eNetwork } from "./../../helpers/types";
-import { MARKET_NAME } from "./../../helpers/env";
+import { POOL_ADMIN } from './../../helpers/constants';
+import { getProxyImplementationBySlot } from './../../helpers/utilities/tx';
+import { getFirstSigner } from './../../helpers/utilities/signer';
+import { eNetwork } from './../../helpers/types';
+import { MARKET_NAME } from './../../helpers/env';
 import {
   loadPoolConfig,
   getParamPerNetwork,
   isTestnetMarket,
-} from "./../../helpers/market-config-helpers";
-import { ZERO_ADDRESS } from "../../helpers/constants";
-import {
-  TREASURY_CONTROLLER_ID,
-  TREASURY_IMPL_ID,
-} from "../../helpers/deploy-ids";
-import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { DeployFunction } from "hardhat-deploy/types";
-import { COMMON_DEPLOY_PARAMS } from "../../helpers/env";
-import { TREASURY_PROXY_ID } from "../../helpers/deploy-ids";
-import {
-  InitializableAdminUpgradeabilityProxy,
-  waitForTx,
-} from "../../helpers";
+} from './../../helpers/market-config-helpers';
+import { ZERO_ADDRESS } from '../../helpers/constants';
+import { TREASURY_CONTROLLER_ID, TREASURY_IMPL_ID } from '../../helpers/deploy-ids';
+import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import { DeployFunction } from 'hardhat-deploy/types';
+import { COMMON_DEPLOY_PARAMS } from '../../helpers/env';
+import { TREASURY_PROXY_ID } from '../../helpers/deploy-ids';
+import { InitializableAdminUpgradeabilityProxy, waitForTx } from '../../helpers';
 import {
   AaveEcosystemReserveController__factory,
   AaveEcosystemReserveV2,
   AaveEcosystemReserveV2__factory,
   InitializableAdminUpgradeabilityProxy__factory,
-} from "../../typechain";
-import { getAddress } from "ethers/lib/utils";
+} from '../../typechain';
+import { getAddress } from 'ethers/lib/utils';
 
 /**
  * @notice A treasury proxy can be deployed per network or per market.
@@ -44,10 +38,7 @@ const func: DeployFunction = async function ({
   const { ReserveFactorTreasuryAddress } = await loadPoolConfig(MARKET_NAME);
 
   const network = (process.env.FORK || hre.network.name) as eNetwork;
-  const treasuryAddress = getParamPerNetwork(
-    ReserveFactorTreasuryAddress,
-    network
-  );
+  const treasuryAddress = getParamPerNetwork(ReserveFactorTreasuryAddress, network);
   let treasuryOwner = POOL_ADMIN[network];
 
   if (isTestnetMarket(await loadPoolConfig(MARKET_NAME))) {
@@ -81,14 +72,16 @@ const func: DeployFunction = async function ({
   // Deploy Treasury proxy
   const treasuryProxyArtifact = await deploy(TREASURY_PROXY_ID, {
     from: deployer,
-    contract: "InitializableAdminUpgradeabilityProxy",
+    contract:
+      '@aave/core-v3/contracts/dependencies/openzeppelin/upgradeability/InitializableAdminUpgradeabilityProxy.sol:InitializableAdminUpgradeabilityProxy',
+    // contract: 'InitializableAdminUpgradeabilityProxy',
     args: [],
   });
 
   // Deploy Treasury Controller
   const treasuryController = await deploy(TREASURY_CONTROLLER_ID, {
     from: deployer,
-    contract: "AaveEcosystemReserveController",
+    contract: 'AaveEcosystemReserveController',
     args: [treasuryOwner],
     ...COMMON_DEPLOY_PARAMS,
   });
@@ -96,7 +89,7 @@ const func: DeployFunction = async function ({
   // Deploy Treasury implementation and initialize proxy
   const treasuryImplArtifact = await deploy(TREASURY_IMPL_ID, {
     from: deployer,
-    contract: "AaveEcosystemReserveV2",
+    contract: 'AaveEcosystemReserveV2',
     args: [],
     ...COMMON_DEPLOY_PARAMS,
   });
@@ -115,13 +108,12 @@ const func: DeployFunction = async function ({
     treasuryProxyArtifact.address
   )) as InitializableAdminUpgradeabilityProxy;
 
-  const initializePayload = treasuryImpl.interface.encodeFunctionData(
-    "initialize",
-    [treasuryController.address]
-  );
+  const initializePayload = treasuryImpl.interface.encodeFunctionData('initialize', [
+    treasuryController.address,
+  ]);
 
   await waitForTx(
-    await proxy["initialize(address,address,bytes)"](
+    await proxy['initialize(address,address,bytes)'](
       treasuryImplArtifact.address,
       treasuryOwner,
       initializePayload
@@ -131,8 +123,8 @@ const func: DeployFunction = async function ({
   return true;
 };
 
-func.tags = ["periphery-pre", "TreasuryProxy"];
+func.tags = ['periphery-pre', 'TreasuryProxy'];
 func.dependencies = [];
-func.id = "Treasury";
+func.id = 'Treasury';
 
 export default func;

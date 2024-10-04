@@ -75,7 +75,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/aave/aave-v3-deploy"
+    "url": "git://github.com/IntersectLabs/intersect-deploy"
   },
   "dependencies": {
     "@openzeppelin/defender-relay-client": "^1.54.1"

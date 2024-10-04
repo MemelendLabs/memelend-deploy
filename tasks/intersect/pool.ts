@@ -2,10 +2,13 @@ import { task } from 'hardhat/config';
 import { getPool, waitForTx } from '../../helpers';
 
 // address of the proxy pool contract
-const POOL_ADDRESS = '0x88F4E76115e210c5f12B2b740fADf062E422B27F';
+// aave market pool
+// const POOL_ADDRESS = '0x88F4E76115e210c5f12B2b740fADf062E422B27F';
+// intersect market pool
+const POOL_ADDRESS = '0x136B5549273715202D400e1a0E9b7A8fD5eB0842';
 
 // npx hardhat --network neoX-testnet intersect:supply --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --behalf '' --referral 0 --amount 1000000;
-// npx hardhat --network neoX-testnet intersect:supply --asset 0x646212B2cbdA223eE82C409F50d9EaA790Efa551 --behalf '' --referral 0 --amount 1000000;
+// npx hardhat --network neoX-testnet intersect:supply --asset 0x0fD30BA2Ff7bc336ddaBfb4a4fEE63D0b68b0327 --behalf '' --referral 0 --amount 1000000000000000;
 task('intersect:supply', 'Supply tokens to the pool')
   .addParam('asset', 'The address of the asset')
   .addParam('amount', 'The amount of asset to supply')
@@ -111,17 +114,21 @@ task('intersect:repayWithATokens', 'Repay borrowed tokens with aTokens to the po
     console.log(txRes);
   });
 
+// total150083513906
+// npx hardhat --network neoX-testnet intersect:liquidationCall --user '0x05e8EFDe59606B1aB4E1EefB992E99939117aD62' --collateral 0xc4463A7456b48500CC2a2B747C54deE0CB671B3c --debt 0x0fD30BA2Ff7bc336ddaBfb4a4fEE63D0b68b0327 --covering 1501016481796826376437 --atoken false
 task('intersect:liquidationCall', 'Liquidate a position')
   .addParam('collateral', 'The address of the collateral asset')
   .addParam('debt', 'The address of the debt asset')
   .addParam('user', 'The address of the user')
   .addParam('covering', 'The amount of debt to cover')
-  .addParam('receiveAToken', 'Receive aTokens or not')
-  .setAction(async ({ collateral, debt, user, covering, receiveAToken }, hre) => {
+  .addParam('atoken', 'Receive aTokens or not')
+  .setAction(async ({ collateral, debt, user, covering, atoken }, hre) => {
     const poolContract = await getPool(POOL_ADDRESS);
 
+    const toCover = hre.ethers.BigNumber.from(covering).div(2);
+
     const txRes = await waitForTx(
-      await poolContract.liquidationCall(collateral, debt, user, covering, receiveAToken)
+      await poolContract.liquidationCall(collateral, debt, user, toCover, atoken)
     );
     console.log(txRes);
   });

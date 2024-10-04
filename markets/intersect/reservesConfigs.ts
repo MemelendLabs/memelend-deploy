@@ -27,8 +27,8 @@ export const strategySWTH: IReserveParams = {
 
 export const strategyNEO: IReserveParams = {
   strategy: rateStrategyNeutralTen,
-  baseLTVAsCollateral: '6000',
-  liquidationThreshold: '7000',
+  baseLTVAsCollateral: '5000',
+  liquidationThreshold: '6000',
   liquidationBonus: '10300',
   liquidationProtocolFee: '1000',
   borrowingEnabled: true,
@@ -43,10 +43,10 @@ export const strategyNEO: IReserveParams = {
   borrowableIsolation: false,
 };
 
-export const strategyWGAS: IReserveParams = {
+export const strategyWGAS10: IReserveParams = {
   strategy: rateStrategyNeutralTen,
-  baseLTVAsCollateral: '6000',
-  liquidationThreshold: '7000',
+  baseLTVAsCollateral: '5000',
+  liquidationThreshold: '6000',
   liquidationBonus: '10300',
   liquidationProtocolFee: '1000',
   borrowingEnabled: true,
@@ -133,7 +133,7 @@ export const strategyUSDT: IReserveParams = {
   borrowableIsolation: false,
 };
 
-export const strategyWSTETH: IReserveParams = {
+export const strategywstETH: IReserveParams = {
   strategy: rateStrategySafeFive,
   baseLTVAsCollateral: '7500',
   liquidationThreshold: '7900',

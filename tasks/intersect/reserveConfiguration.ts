@@ -3,8 +3,6 @@ import { task } from 'hardhat/config';
 import { BigNumberish } from 'ethers';
 import {
   waitForTx,
-  getPool,
-  eContractid,
   getPoolAddressesProvider,
   getPoolConfiguratorProxy,
   IInterestRateStrategyParams,
@@ -27,9 +25,8 @@ interface InputParams {
 }
 [];
 
-const POOL_ADDRESS_PROVIDER = '0xad4FCd209503137a237119d8f6e946CA61324051';
-const ASSET_ADDRESS = '0x6Ab8ce882d34eE414E09C8C8Fd4715c45592F923';
-
+const POOL_ADDRESS_PROVIDER = '0x108fFADF2cA68c1b274CD5193454C33e9eBba7A4';
+const ASSET_ADDRESS = '0x1CE16390FD09040486221e912B87551E4e44Ab17';
 const HUNDRED_PERCENT_BPS = '10000';
 
 // npx hardhat --network neoX-testnet intersect:setReserveConfiguration
@@ -43,15 +40,15 @@ task('intersect:setReserveConfiguration', 'Set reserve configuration for the ass
 
     const reserveParam: InputParams = {
       asset: ASSET_ADDRESS,
-      baseLTV: '8000',
-      liquidationThreshold: '8500',
-      liquidationBonus: '10500',
+      baseLTV: '6000',
+      liquidationThreshold: '7000',
+      liquidationBonus: '10300',
       reserveFactor: '1000',
-      borrowCap: '1000000000',
-      supplyCap: '2000000000',
+      borrowCap: '100000',
+      supplyCap: '100000',
       borrowingEnabled: true,
       stableBorrowingEnabled: false,
-      flashLoanEnabled: false,
+      flashLoanEnabled: true,
     };
 
     // validations
@@ -157,7 +154,7 @@ task('itersect:deployRateStrategy', 'Deploy rate strategy').setAction(async ({},
   console.log(`Depoly strategy contract for ${strategyData.name} at ${strategyInstance.address}`);
 });
 
-// Param interface for reserver initialization
+// Param interface for reserve initialization
 interface ReserveInitParams {
   aTokenImpl: string;
   stableDebtTokenImpl: string;
@@ -177,22 +174,22 @@ interface ReserveInitParams {
   params: string;
 }
 
-const A_TOKEN_IMPL = '0x8169459BfF8cf433A16c0D4a16075d4e9be25458';
-const VARIABLE_TOKEN_IMPL = '0xE186284823Ee249846112a1CB4742cD8cA1B6cB4';
-const STABLE_TOKEN_IMPL = '0x3a571dCb2449D01870C88c916C36b1B5D467774c';
-const STRATEGY_ADDRESS = '0xC0D22793Be4603eD79e2800523627e42b0F102C2';
-const UNDERLYING_ADDRESS = '';
-const UNDERLYING_NAME = 'AAVE2';
+const A_TOKEN_IMPL = '0x777BD1c7A0F7DC3efD23F5E461c89F94d7b8a6c8';
+const STABLE_TOKEN_IMPL = '0x0fd0B140599d15BB8133Cf903d949E5c5545bD23';
+const VARIABLE_TOKEN_IMPL = '0x4Ab1434e6760fdf5910464E58ed57028f28b2F18';
+const STRATEGY_ADDRESS = '0xfe6541522F4fB99443e05287fB106D5a30aFb982';
+const UNDERLYING_ADDRESS = '0x1CE16390FD09040486221e912B87551E4e44Ab17';
+const UNDERLYING_NAME = 'WGAS10';
 const UNDERLYING_DECIMALS = '18';
-const TREASURY_ADDRESS = '0x68285085285fdf2C6B43B5135b7bEBC08F82F570';
-const INCENTIVES_ADDRESS = '0xef98BBcAd94C21DdeD8FCd8d4B2c103B5251666c';
+const TREASURY_ADDRESS = '0x200e9ae5158c21dEF3b2cD08d35B33C99C14fc42';
+const INCENTIVES_ADDRESS = '0xeA398fF53A62E0e9Fe954fCfcaf077a57ae73557';
 
-const TOKEN_NAME = 'aInSwth';
-const TOKEN_SYMBOL = 'aInSWTH';
-const VAR_TOKEN_NAME = 'variableDebInSwth';
-const VAR_TOKEN_SYMBOL = 'variableDebInSWTH';
-const STABLE_TOKEN_NAME = 'stableDebtInSwth';
-const STABLE_TOKEN_SYMBOL = 'stableDebtInSWTH';
+const TOKEN_NAME = 'Intersect ' + UNDERLYING_NAME;
+const TOKEN_SYMBOL = 'aIn' + UNDERLYING_NAME;
+const VAR_TOKEN_NAME = 'Intersect Variable Debt ' + UNDERLYING_NAME;
+const VAR_TOKEN_SYMBOL = 'variableDebtIn' + UNDERLYING_NAME;
+const STABLE_TOKEN_NAME = 'Intersect Stable Debt ' + UNDERLYING_NAME;
+const STABLE_TOKEN_SYMBOL = 'stableDebtIn' + UNDERLYING_NAME;
 
 // npx hardhat --network neoX-testnet intersect:initReserve
 task('intersect:initReserve', 'Initialize reserve').setAction(async ({}, hre) => {
@@ -240,5 +237,27 @@ task('intersect:initReserve', 'Initialize reserve').setAction(async ({}, hre) =>
   const initReserveTx = await waitForTx(await configurator.initReserves([reserveParams]));
 
   console.log('Reserve initialized');
+  console.log(initReserveTx);
   console.log('Please run the reserve configuration task to set the reserve configuration');
 });
+
+// const reservesToDrop = [
+//   '0xfda8C165dA5119D2a86d42D6a237f8548d2DC7fa',
+//   '0x0fD30BA2Ff7bc336ddaBfb4a4fEE63D0b68b0327',
+//   '0xc4463A7456b48500CC2a2B747C54deE0CB671B3c',
+//   '0x97189Fa5B08A6F8Ceb2aa4CD4a45429dC0978eb7',
+// ];
+
+// npx hardhat --network neoX-testnet intersect:dropReserve --asset 0x97189Fa5B08A6F8Ceb2aa4CD4a45429dC0978eb7
+task('intersect:dropReserve', 'Drop reserve')
+  .addParam('asset', 'The address of the asset to drop')
+  .setAction(async ({ asset }, hre) => {
+    const poolAddressProvider = await getPoolAddressesProvider(POOL_ADDRESS_PROVIDER);
+    const configuratorAddr = await poolAddressProvider.getPoolConfigurator();
+    const configurator = await getPoolConfiguratorProxy(configuratorAddr);
+
+    // use the configurator to drop the reserve
+    await waitForTx(await configurator.dropReserve(asset));
+
+    console.log(`Reserve dropped for ${asset}`);
+  });

@@ -98,6 +98,7 @@ export const NETWORKS_RPC_URL: iParamsPerNetwork<string> = {
   [eBaseNetwork.baseGoerli]: `https://goerli.base.org`,
   [eBaseNetwork.base]: `https://base-mainnet.g.alchemy.com/v2/${getAlchemyKey(eBaseNetwork.base)}`,
   [eNeoXNetwork.testnet]: `https://neoxt4seed1.ngd.network`,
+  [eNeoXNetwork.main]: `https://mainnet-1.rpc.banelabs.org`,
 };
 
 export const LIVE_NETWORKS: iParamsPerNetwork<boolean> = {
@@ -116,6 +117,7 @@ const GAS_PRICE_PER_NET: iParamsPerNetwork<string | number> = {
   [eArbitrumNetwork.goerliNitro]: 100000001,
   [eBaseNetwork.baseGoerli]: 8000000000,
   [eNeoXNetwork.testnet]: 40000000000, // this is required if there is a minGasTipCap or baseFee underprice for NeoX-testnet
+  [eNeoXNetwork.main]: 40000000000, // this is required if there is a minGasTipCap or baseFee underprice for NeoX-testnet
 };
 
 export const buildForkConfig = (): HardhatNetworkForkingUserConfig | undefined => {
@@ -165,6 +167,7 @@ const MNEMONICS: iParamsPerNetwork<string> = {
   [ePolygonNetwork.mumbai]: process.env.POLYGON_MUMBAI_MNEMONIC,
   [ePolygonNetwork.polygon]: process.env.POLYGON_MNEMONIC,
   [eNeoXNetwork.testnet]: process.env.NEOX_MNEMONIC,
+  [eNeoXNetwork.main]: process.env.SWITCHEO_MNEMONIC,
 };
 
 export const hardhatNetworkSettings = {
