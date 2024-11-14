@@ -93,6 +93,7 @@ export default {
     [eBaseNetwork.base]: getCommonNetworkConfig(eBaseNetwork.base, 8453),
     [eBaseNetwork.baseGoerli]: getCommonNetworkConfig(eBaseNetwork.baseGoerli, 84531),
     [eNeoXNetwork.testnet]: getCommonNetworkConfig(eNeoXNetwork.testnet, 12227332),
+    [eNeoXNetwork.main]: getCommonNetworkConfig(eNeoXNetwork.main, 47763),
   },
   namedAccounts: {
     ...DEFAULT_NAMED_ACCOUNTS,
@@ -188,7 +189,7 @@ export default {
         chainId: 12227332,
         urls: {
           apiURL: 'https://neoxt4seed1.ngd.network',
-          browserURL: 'https://xt4scan.ngd.network',
+          browserURL: 'https://xt4scan.ngd.network/api',
         },
       },
     ],

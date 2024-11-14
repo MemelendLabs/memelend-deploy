@@ -5,7 +5,7 @@ import { getPool, waitForTx } from '../../helpers';
 // aave market pool
 // const POOL_ADDRESS = '0x88F4E76115e210c5f12B2b740fADf062E422B27F';
 // intersect market pool
-const POOL_ADDRESS = '0x136B5549273715202D400e1a0E9b7A8fD5eB0842';
+const POOL_ADDRESS = '0xf7c9d3Ad727527D2D19138C56b087c9f3a5f6D2a';
 
 // npx hardhat --network neoX-testnet intersect:supply --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --behalf '' --referral 0 --amount 1000000;
 // npx hardhat --network neoX-testnet intersect:supply --asset 0x0fD30BA2Ff7bc336ddaBfb4a4fEE63D0b68b0327 --behalf '' --referral 0 --amount 1000000000000000;
@@ -151,7 +151,7 @@ task('intersect:getUserDetails', 'Get user configuration')
   });
 
 // npx hardhat --network neoX-testnet intersect:getReserveFromPool --asset 0x6Ab8ce882d34eE414E09C8C8Fd4715c45592F923;
-task('intersect:getReserveFromPool', 'Get reserver data from the pool')
+task('intersect:getReserveFromPool', 'Get reserve data from the pool')
   .addParam('asset', 'The address of the asset')
   .setAction(async ({ asset }, hre) => {
     const poolContract = await getPool(POOL_ADDRESS);
@@ -159,3 +159,11 @@ task('intersect:getReserveFromPool', 'Get reserver data from the pool')
     const reserveData = await poolContract.getReserveData(asset);
     console.log('reserve data', reserveData);
   });
+
+// npx hardhat --network neoX intersect:getReservesList;
+task('intersect:getReservesList', 'Get reserves list from the pool').setAction(async (hre) => {
+  const poolContract = await getPool(POOL_ADDRESS);
+
+  const reservesData = await poolContract.getReservesList();
+  console.log('reserves data', reservesData);
+});

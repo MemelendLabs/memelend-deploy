@@ -24,10 +24,28 @@ import { MARKET_NAME } from '../../helpers/env';
 import { eNetwork, ICommonConfiguration } from '../../helpers/types';
 import { parseUnits } from 'ethers/lib/utils';
 
-const ORACLE_ADDRESS = '0x8B512d4391C49300388ada23995EdbeE8bE966f6';
+const ORACLE_ADDRESS = '0x186dfb689CA6E4F85716B7a187a25cA4d2E6fBaA'; // mainnet NeoX
+const SUPRA_STORAGE = '0x58e158c74DF7Ad6396C0dcbadc4878faC9e93d57';
 
-// npx hardhat --network neoX-testnet intersect:addAssetSource --asset 0x1CE16390FD09040486221e912B87551E4e44Ab17 --source 0xD8b3379fF7DE5d874134783870eC9cdc0820D711;
-task('intersect:addAssetSource', 'Add asset source to the market')
+// ========== Aave Oracle Tasks ==========
+
+// npx hardhat --network neoX intersect:getSourceOfAsset --asset 0x1CE16390FD09040486221e912B87551E4e44Ab17
+task('intersect:getSourceOfAsset', 'Get source of asset for the pricing')
+  .addParam('asset', 'The address of asset')
+  .setAction(async ({ asset }, hre) => {
+    const marketOracle = await getAaveOracle(ORACLE_ADDRESS);
+
+    // const marketContract = await ethers.getContractAt('Market', asset, signer);
+    // const res = await marketContract.addAssetSource(source);
+    const res = await marketOracle.getSourceOfAsset(asset);
+
+    console.log(res);
+
+    console.log(`Source of ${asset} is ${res}`);
+  });
+
+// npx hardhat --network neoX-testnet intersect:setAssetSources --asset 0xc28736dc83f4fd43d6fb832Fd93c3eE7bB26828f --source 0xfCd51732168F47686fC8E1422c80D40438fC84cC;
+task('intersect:setAssetSources', 'Add asset source to the market')
   .addParam('asset', 'The address of asset')
   .addParam('source', 'The address of source CLA')
   .setAction(async ({ asset, source }, hre) => {
@@ -60,7 +78,7 @@ task('intersect:setAssetPrice', 'Deploy a mock CLA with specified price for asse
     console.log(`Changed source to ${aggregator.address} for asset ${asset}`);
   });
 
-// npx hardhat --network neoX-testnet intersect:getAssetPrice --asset 0xA40b7eCEC44B653B842177d5d5cAf0FB3D01D474
+// npx hardhat --network neoX-testnet intersect:getAssetPrice --asset 0xdE41591ED1f8ED1484aC2CD8ca0876428de60EfF
 task('intersect:getAssetPrice', 'Get asset price from the market oracle')
   .addParam('asset', 'The address of asset')
   .setAction(async ({ asset }, hre) => {
@@ -79,39 +97,6 @@ task('intersect:getBaseDetails', 'Get Base currency of the market').setAction(as
   const baseUnit = await marketOracle.BASE_CURRENCY_UNIT();
 
   console.log(`Base currency: ${baseCurrency}, Base unit: ${baseUnit}`);
-});
-
-// npx hardhat --network neoX-testnet intersect:deployBaseAggregator
-task('intersect:deployBaseAggregator', 'Deploy the base currency mock aggregator').setAction(
-  async ({}, hre) => {
-    const ethers = hre.ethers;
-    const [signer] = await ethers.getSigners();
-
-    const factory = new MockAggregator__factory(signer);
-
-    const aggregator = await factory.deploy('300000000');
-    await aggregator.deployed();
-
-    console.log(`Deployed base currency aggregator at ${aggregator.address}`);
-  }
-);
-
-// npx hardhat --network neoX-testnet intersect:checkMockAggregator
-task(
-  'intersect:checkMockAggregator',
-  'Query latest answer of the base currency mock aggregator'
-).setAction(async ({}, hre) => {
-  const ethers = hre.ethers;
-  const [signer] = await ethers.getSigners();
-
-  const factory = new MockAggregator__factory();
-  const aggregator = await factory
-    .connect(signer)
-    .attach('0xD8b3379fF7DE5d874134783870eC9cdc0820D711');
-
-  const price = await aggregator.latestAnswer();
-
-  console.log(`Latest answer: ${price}`);
 });
 
 // npx hardhat --network neoX-testnet intersect:deployMarketOracle
@@ -172,19 +157,7 @@ task('intersect:deployMarketOracle', 'Deploy the main market oracle')
     console.log(`Set price oracle to the address provider`);
   });
 
-// npx hardhat --network neoX-testnet intersect:queryChainlinkAgg --aggregator 0x99f4800f8958Caf403688b988f683188dF36CEaF
-task('intersect:queryChainlinkAgg', 'Query the chainlink aggregator for a value')
-  .addParam('aggregator', 'The address of the aggregator')
-  .setAction(async ({ aggregator }, hre) => {
-    const ethers = hre.ethers;
-    const [signer] = await ethers.getSigners();
-
-    const agg = await AggregatorV3Interface__factory.connect(aggregator, signer);
-
-    const data = await agg.latestRoundData();
-    console.log(data);
-  });
-
+// =========== AGGREGATOR TASKS ===========
 // npx hardhat --network neoX-testnet intersect:supraStorage --supra 0x58e158c74DF7Ad6396C0dcbadc4878faC9e93d57 --index 44
 task('intersect:supraStorage', 'Query supra storage directly for price index')
   .addParam('supra', 'The address of the supra storage')
@@ -199,8 +172,7 @@ task('intersect:supraStorage', 'Query supra storage directly for price index')
     console.log(data);
   });
 
-// npx hardhat --network neoX intersect:deploySupraUsdtAggregator --asset 0xdE41591ED1f8ED1484aC2CD8ca0876428de60EfF --index 260 --pair 'wGAS10_USDT'
-const SUPRA_STORAGE = '0x58e158c74DF7Ad6396C0dcbadc4878faC9e93d57';
+// npx hardhat --network neoX intersect:deploySupraUsdtAggregator --asset 0xc28736dc83f4fd43d6fb832Fd93c3eE7bB26828f --index 44 --pair 'NEO_USDT'
 task(
   'intersect:deploySupraUsdtAggregator',
   'Deploy adapted chainlink-supra agggregator for Intersect oracle'
@@ -224,7 +196,7 @@ task(
     console.log(data);
   });
 
-// npx hardhat --network neoX intersect:querySupraUsdtAggregator --aggregator 0x6165353FC873328316d5299b86E855B74FD83389
+// npx hardhat --network neoX intersect:querySupraUsdtAggregator --aggregator 0xB28F39BDba7feD13c7e5FB050881bfA6b49eBf3b
 task(
   'intersect:querySupraUsdtAggregator',
   'Query chainlink-supra agggregator linked to Supra storage'
@@ -249,6 +221,21 @@ task(
     const latestAnswer = await agg.latestAnswer();
     console.log({ latestAnswer });
   });
+
+// npx hardhat --network neoX-testnet intersect:queryChainlinkAgg --aggregator 0x99f4800f8958Caf403688b988f683188dF36CEaF
+task('intersect:queryChainlinkAgg', 'Query the chainlink aggregator for a value')
+  .addParam('aggregator', 'The address of the aggregator')
+  .setAction(async ({ aggregator }, hre) => {
+    const ethers = hre.ethers;
+    const [signer] = await ethers.getSigners();
+
+    const agg = await AggregatorV3Interface__factory.connect(aggregator, signer);
+
+    const data = await agg.latestRoundData();
+    console.log(data);
+  });
+
+// ============= MOCK RELATED TASKS =============
 
 // npx hardhat --network neoX-testnet intersect:deployMockSupraAggregator --asset 0x0cb21f4D98F16A1982Ce3e3b49C48b5b8C2126C7 --index 166 --pair 'wBTC_USDT'
 
@@ -347,4 +334,36 @@ task(
     console.log(`Supra storage ${data}`);
   });
 
+// npx hardhat --network neoX-testnet intersect:deployBaseAggregator
+task('intersect:deployBaseAggregator', 'Deploy the base currency mock aggregator').setAction(
+  async ({}, hre) => {
+    const ethers = hre.ethers;
+    const [signer] = await ethers.getSigners();
+
+    const factory = new MockAggregator__factory(signer);
+
+    const aggregator = await factory.deploy('300000000');
+    await aggregator.deployed();
+
+    console.log(`Deployed base currency aggregator at ${aggregator.address}`);
+  }
+);
+
+// npx hardhat --network neoX-testnet intersect:checkMockAggregator
+task(
+  'intersect:checkMockAggregator',
+  'Query latest answer of the base currency mock aggregator'
+).setAction(async ({}, hre) => {
+  const ethers = hre.ethers;
+  const [signer] = await ethers.getSigners();
+
+  const factory = new MockAggregator__factory();
+  const aggregator = await factory
+    .connect(signer)
+    .attach('0xD8b3379fF7DE5d874134783870eC9cdc0820D711');
+
+  const price = await aggregator.latestAnswer();
+
+  console.log(`Latest answer: ${price}`);
+});
 // TODO: Task to set all the sources of assets to the new chianLinkInterface

@@ -8,8 +8,8 @@ import {
 } from '../../helpers';
 import { ZERO_ADDRESS } from '../../helpers/constants';
 
-const POOL_ADDRESS = '0x136B5549273715202D400e1a0E9b7A8fD5eB0842';
-const POOL_ADDRESS_PROVIDER = '0x108fFADF2cA68c1b274CD5193454C33e9eBba7A4';
+const POOL_ADDRESS = '0xf7c9d3Ad727527D2D19138C56b087c9f3a5f6D2a';
+const POOL_ADDRESS_PROVIDER = '0x37EC7775993A2Ac8197ed5173eDDC8FB0cb3f0b6';
 
 // npx hardhat --network neoX-testnet intersect:deployTokenImplementations
 task('intersect:deployTokenImplementations', 'Deploy debt token implementations').setAction(

@@ -106,6 +106,7 @@ export const chainlinkAggregatorProxy: Record<string, string> = {
   [eArbitrumNetwork.goerliNitro]: '0xC09e69E79106861dF5d289dA88349f10e2dc6b5C',
   [eEthereumNetwork.sepolia]: '0x6c60d915c7a646860dba836ffcb7f112b6cfdc76',
   [eNeoXNetwork.testnet]: '0xf82aeeD598833B428352A47dCFb2C1F90C7A379F',
+  [eNeoXNetwork.main]: '0xB28F39BDba7feD13c7e5FB050881bfA6b49eBf3b',
 };
 
 // TODO: This needs to be sets
@@ -131,6 +132,7 @@ export const chainlinkEthUsdAggregatorProxy: Record<string, string> = {
   [eArbitrumNetwork.goerliNitro]: '0xC09e69E79106861dF5d289dA88349f10e2dc6b5C',
   [eEthereumNetwork.sepolia]: '0x6c60d915c7a646860dba836ffcb7f112b6cfdc76',
   [eNeoXNetwork.testnet]: '0xf82aeeD598833B428352A47dCFb2C1F90C7A379F',
+  [eNeoXNetwork.main]: '0xB28F39BDba7feD13c7e5FB050881bfA6b49eBf3b',
 };
 
 export const ETHEREUM_SHORT_EXECUTOR = '0xEE56e2B3D491590B5b31738cC34d5232F378a8D5';

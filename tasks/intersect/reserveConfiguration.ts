@@ -10,6 +10,86 @@ import {
 } from '../../helpers';
 import { DefaultReserveInterestRateStrategy__factory, MintableERC20__factory } from '../../helpers';
 
+const POOL_ADDRESS_PROVIDER = '0x37EC7775993A2Ac8197ed5173eDDC8FB0cb3f0b6';
+
+// USE THIS TO INITIALIZE A RESERVE
+const A_TOKEN_IMPL = '0x2363eFbb94b77E16DF25722E23E0d30f6DfCf5DA'; // AToken - Intersect
+const STABLE_TOKEN_IMPL = '0x4F7C055019De31A6DCF6Bb38661EF0083df3Feb4'; // StableDebtToken-Intersect
+const VARIABLE_TOKEN_IMPL = '0x7F7F3D9A85540678C082f904B989537f3838631a'; // VariableDebtToken-Intersect
+const UNDERLYING_ADDRESS = '0xc28736dc83f4fd43d6fb832Fd93c3eE7bB26828f';
+const UNDERLYING_NAME = 'NEO';
+const UNDERLYING_DECIMALS = '18';
+const TREASURY_ADDRESS = '0x35e2d4fe70bbe3cBf3De0B270957BdCBC8f69285'; // Treasury proxy
+const INCENTIVES_ADDRESS = '0x19789F2043C9845bcE7fb71B2358763247d32B61'; // Incentives proxy
+const STRATEGY_ADDRESS = '0xB503A122A40eb57FD28d545fd19d0111B060d896'; // Rate strategy folling the one listed in the sheets
+
+// NOTE: All configuration params are in bps, and string the numbers
+const LTV = '5000';
+const LIQUIDATION_THRESHOLD = '6000';
+const LIQUIDATION_BONUS = '10300'; // on the spreadsheet this is 103% but it should be 10300bps
+const RESERVE_FACTOR = '1000';
+const BORROW_CAP = '100000';
+const SUPPLY_CAP = '100000';
+const BORROWING_ENABLED = true;
+const STABLE_BORROWING_ENABLED = false; // this should always be false
+const FLASH_LOAN_ENABLED = true;
+
+const TOKEN_NAME = 'Intersect ' + UNDERLYING_NAME;
+const TOKEN_SYMBOL = 'aIn' + UNDERLYING_NAME;
+const VAR_TOKEN_NAME = 'Intersect Variable Debt ' + UNDERLYING_NAME;
+const VAR_TOKEN_SYMBOL = 'variableDebtIn' + UNDERLYING_NAME;
+const STABLE_TOKEN_NAME = 'Intersect Stable Debt ' + UNDERLYING_NAME;
+const STABLE_TOKEN_SYMBOL = 'stableDebtIn' + UNDERLYING_NAME;
+
+// npx hardhat --network neoX-testnet intersect:initReserve
+task('intersect:initReserve', 'Initialize reserve').setAction(async ({}, hre) => {
+  const poolAddressProvider = await getPoolAddressesProvider(POOL_ADDRESS_PROVIDER);
+  const configuratorAddr = await poolAddressProvider.getPoolConfigurator();
+  const configurator = await getPoolConfiguratorProxy(configuratorAddr);
+
+  // if the underlying is not specified it needs to be deployed this is mainely for testing
+  let underlyingAsset = UNDERLYING_ADDRESS;
+  // if (underlyingAsset == '') {
+  //   console.log('deploying underlying asset');
+  //   const ethers = hre.ethers;
+  //   const [signer] = await ethers.getSigners();
+  //   const tokenFactory = new MintableERC20__factory(signer);
+  //   const tokenInstance = await tokenFactory.deploy(
+  //     UNDERLYING_NAME,
+  //     UNDERLYING_NAME,
+  //     UNDERLYING_DECIMALS
+  //   );
+  //   await tokenInstance.deployed();
+  //   underlyingAsset = tokenInstance.address;
+  //   console.log(`deployed underlying asset at ${underlyingAsset}`);
+  // }
+
+  const reserveParams: ReserveInitParams = {
+    aTokenImpl: A_TOKEN_IMPL,
+    stableDebtTokenImpl: STABLE_TOKEN_IMPL,
+    variableDebtTokenImpl: VARIABLE_TOKEN_IMPL,
+    underlyingAssetDecimals: UNDERLYING_DECIMALS,
+    interestRateStrategyAddress: STRATEGY_ADDRESS,
+    underlyingAsset: underlyingAsset,
+    treasury: TREASURY_ADDRESS,
+    incentivesController: INCENTIVES_ADDRESS,
+    underlyingAssetName: UNDERLYING_NAME,
+    aTokenName: TOKEN_NAME,
+    aTokenSymbol: TOKEN_SYMBOL,
+    variableDebtTokenName: VAR_TOKEN_NAME,
+    variableDebtTokenSymbol: VAR_TOKEN_SYMBOL,
+    stableDebtTokenName: STABLE_TOKEN_NAME,
+    stableDebtTokenSymbol: STABLE_TOKEN_SYMBOL,
+    params: '0x10',
+  };
+
+  const initReserveTx = await waitForTx(await configurator.initReserves([reserveParams]));
+
+  console.log('Reserve initialized');
+  console.log(initReserveTx);
+  console.log('Please run the reserve configuration task to set the reserve configuration');
+});
+
 // Reserve Config Input parameters
 interface InputParams {
   asset: string;
@@ -25,8 +105,6 @@ interface InputParams {
 }
 [];
 
-const POOL_ADDRESS_PROVIDER = '0x108fFADF2cA68c1b274CD5193454C33e9eBba7A4';
-const ASSET_ADDRESS = '0x1CE16390FD09040486221e912B87551E4e44Ab17';
 const HUNDRED_PERCENT_BPS = '10000';
 
 // npx hardhat --network neoX-testnet intersect:setReserveConfiguration
@@ -39,16 +117,16 @@ task('intersect:setReserveConfiguration', 'Set reserve configuration for the ass
     const configurator = await getPoolConfiguratorProxy(configuratorAddr);
 
     const reserveParam: InputParams = {
-      asset: ASSET_ADDRESS,
-      baseLTV: '6000',
-      liquidationThreshold: '7000',
-      liquidationBonus: '10300',
-      reserveFactor: '1000',
-      borrowCap: '100000',
-      supplyCap: '100000',
-      borrowingEnabled: true,
-      stableBorrowingEnabled: false,
-      flashLoanEnabled: true,
+      asset: UNDERLYING_ADDRESS,
+      baseLTV: LTV,
+      liquidationThreshold: LIQUIDATION_THRESHOLD,
+      liquidationBonus: LIQUIDATION_BONUS,
+      reserveFactor: RESERVE_FACTOR,
+      borrowCap: BORROW_CAP,
+      supplyCap: SUPPLY_CAP,
+      borrowingEnabled: BORROWING_ENABLED,
+      stableBorrowingEnabled: STABLE_BORROWING_ENABLED,
+      flashLoanEnabled: FLASH_LOAN_ENABLED,
     };
 
     // validations
@@ -173,73 +251,6 @@ interface ReserveInitParams {
   stableDebtTokenSymbol: string;
   params: string;
 }
-
-const A_TOKEN_IMPL = '0x777BD1c7A0F7DC3efD23F5E461c89F94d7b8a6c8';
-const STABLE_TOKEN_IMPL = '0x0fd0B140599d15BB8133Cf903d949E5c5545bD23';
-const VARIABLE_TOKEN_IMPL = '0x4Ab1434e6760fdf5910464E58ed57028f28b2F18';
-const STRATEGY_ADDRESS = '0xfe6541522F4fB99443e05287fB106D5a30aFb982';
-const UNDERLYING_ADDRESS = '0x1CE16390FD09040486221e912B87551E4e44Ab17';
-const UNDERLYING_NAME = 'WGAS10';
-const UNDERLYING_DECIMALS = '18';
-const TREASURY_ADDRESS = '0x200e9ae5158c21dEF3b2cD08d35B33C99C14fc42';
-const INCENTIVES_ADDRESS = '0xeA398fF53A62E0e9Fe954fCfcaf077a57ae73557';
-
-const TOKEN_NAME = 'Intersect ' + UNDERLYING_NAME;
-const TOKEN_SYMBOL = 'aIn' + UNDERLYING_NAME;
-const VAR_TOKEN_NAME = 'Intersect Variable Debt ' + UNDERLYING_NAME;
-const VAR_TOKEN_SYMBOL = 'variableDebtIn' + UNDERLYING_NAME;
-const STABLE_TOKEN_NAME = 'Intersect Stable Debt ' + UNDERLYING_NAME;
-const STABLE_TOKEN_SYMBOL = 'stableDebtIn' + UNDERLYING_NAME;
-
-// npx hardhat --network neoX-testnet intersect:initReserve
-task('intersect:initReserve', 'Initialize reserve').setAction(async ({}, hre) => {
-  const poolAddressProvider = await getPoolAddressesProvider(POOL_ADDRESS_PROVIDER);
-  const configuratorAddr = await poolAddressProvider.getPoolConfigurator();
-  const configurator = await getPoolConfiguratorProxy(configuratorAddr);
-
-  // if the underlying is not specified it needs to be deployed
-  // ! this needs to be changed for mainnet
-  let underlyingAsset = UNDERLYING_ADDRESS;
-  if (underlyingAsset == '') {
-    console.log('deploying underlying asset');
-    const ethers = hre.ethers;
-    const [signer] = await ethers.getSigners();
-    const tokenFactory = new MintableERC20__factory(signer);
-    const tokenInstance = await tokenFactory.deploy(
-      UNDERLYING_NAME,
-      UNDERLYING_NAME,
-      UNDERLYING_DECIMALS
-    );
-    await tokenInstance.deployed();
-    underlyingAsset = tokenInstance.address;
-    console.log(`deployed underlying asset at ${underlyingAsset}`);
-  }
-
-  const reserveParams: ReserveInitParams = {
-    aTokenImpl: A_TOKEN_IMPL,
-    stableDebtTokenImpl: STABLE_TOKEN_IMPL,
-    variableDebtTokenImpl: VARIABLE_TOKEN_IMPL,
-    underlyingAssetDecimals: UNDERLYING_DECIMALS,
-    interestRateStrategyAddress: STRATEGY_ADDRESS,
-    underlyingAsset: underlyingAsset,
-    treasury: TREASURY_ADDRESS,
-    incentivesController: INCENTIVES_ADDRESS,
-    underlyingAssetName: UNDERLYING_NAME,
-    aTokenName: TOKEN_NAME,
-    aTokenSymbol: TOKEN_SYMBOL,
-    variableDebtTokenName: VAR_TOKEN_NAME,
-    variableDebtTokenSymbol: VAR_TOKEN_SYMBOL,
-    stableDebtTokenName: STABLE_TOKEN_NAME,
-    stableDebtTokenSymbol: STABLE_TOKEN_SYMBOL,
-    params: '0x10',
-  };
-
-  const initReserveTx = await waitForTx(await configurator.initReserves([reserveParams]));
-
-  console.log('Reserve initialized');
-  console.log(initReserveTx);
-  console.log('Please run the reserve configuration task to set the reserve configuration');
-});
 
 // const reservesToDrop = [
 //   '0xfda8C165dA5119D2a86d42D6a237f8548d2DC7fa',
