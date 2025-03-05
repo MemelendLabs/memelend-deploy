@@ -18,8 +18,6 @@ contract SupraUsdtAggregator is Ownable, AggregatorInterface {
     /// @notice price index id used by Supra for the identification of the token pair
     uint256 public assetPriceIndex;
     /// @notice price index id used by Supra for the identification of the USDT/USD pair
-    /// @dev this price index is required for return price data in USD and not USDT
-    uint256 public usdtUsdPriceIndex;
     /// @notice name of the token pair the aggregator is supporting
     string public tokenPair;
 
@@ -27,14 +25,12 @@ contract SupraUsdtAggregator is Ownable, AggregatorInterface {
         address _asset,
         address _supraOracle,
         uint256 _assetPriceIndex,
-        uint256 _usdtUsdPriceIndex,
         uint8 _decimals,
         string memory _tokenPair
     ) Ownable() {
         asset = _asset;
         supraOracle = ISupraSValueFeed(_supraOracle);
         assetPriceIndex = _assetPriceIndex;
-        usdtUsdPriceIndex = _usdtUsdPriceIndex;
         decimals = _decimals;
         tokenPair = _tokenPair;
     }
