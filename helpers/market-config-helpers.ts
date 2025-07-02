@@ -21,7 +21,7 @@ import FantomMarket from '../markets/fantom';
 import PolygonMarket from '../markets/polygon';
 import OptimisticConfig from '../markets/optimistic';
 import ArbitrumConfig from '../markets/arbitrum';
-import IntersectMarket from '../markets/intersect';
+import MemelendMarket from '../markets/memelend';
 import BaseConfig from '../markets/base';
 import { isValidAddress } from './utilities/utils';
 import { AaveProtocolDataProvider } from '../typechain';
@@ -53,7 +53,7 @@ export enum ConfigNames {
   Ethereum = 'Ethereum',
   Base = 'Base',
   baseGoerli = 'base-goerli',
-  Intersect = 'Intersect',
+  Memelend = 'Memelend',
 }
 
 export const getParamPerNetwork = <T>(
@@ -93,7 +93,6 @@ export const getAddressFromConfig = (
   return value;
 };
 
-// TODO: add NEOX parameters
 export const loadPoolConfig = (configName: ConfigNames): PoolConfiguration => {
   switch (configName) {
     case ConfigNames.Aave:
@@ -114,8 +113,8 @@ export const loadPoolConfig = (configName: ConfigNames): PoolConfiguration => {
       return ArbitrumConfig;
     case ConfigNames.Ethereum:
       return EthereumV3Config;
-    case ConfigNames.Intersect:
-      return IntersectMarket;
+    case ConfigNames.Memelend:
+      return MemelendMarket;
     case ConfigNames.Base:
       return BaseConfig;
     default:

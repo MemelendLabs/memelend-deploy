@@ -4,12 +4,12 @@ import { getPool, waitForTx } from '../../helpers';
 // address of the proxy pool contract
 // aave market pool
 // const POOL_ADDRESS = '0x88F4E76115e210c5f12B2b740fADf062E422B27F';
-// intersect market pool
+// memelend market pool
 const POOL_ADDRESS = '0xf7c9d3Ad727527D2D19138C56b087c9f3a5f6D2a';
 
-// npx hardhat --network neoX-testnet intersect:supply --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --behalf '' --referral 0 --amount 1000000;
-// npx hardhat --network neoX-testnet intersect:supply --asset 0x0fD30BA2Ff7bc336ddaBfb4a4fEE63D0b68b0327 --behalf '' --referral 0 --amount 1000000000000000;
-task('intersect:supply', 'Supply tokens to the pool')
+// npx hardhat --network memecore-testnet memelend:supply --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --behalf '' --referral 0 --amount 1000000;
+// npx hardhat --network memecore-testnet memelend:supply --asset 0x0fD30BA2Ff7bc336ddaBfb4a4fEE63D0b68b0327 --behalf '' --referral 0 --amount 1000000000000000;
+task('memelend:supply', 'Supply tokens to the pool')
   .addParam('asset', 'The address of the asset')
   .addParam('amount', 'The amount of asset to supply')
   .addParam('behalf', 'Supplying on behalf which address')
@@ -33,8 +33,8 @@ task('intersect:supply', 'Supply tokens to the pool')
     console.log(txRes);
   });
 
-// npx hardhat --network neoX-testnet intersect:withdraw --to '' --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --amount 1000000;
-task('intersect:withdraw', 'Withdraw tokens from the pool')
+// npx hardhat --network memecore-testnet memelend:withdraw --to '' --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --amount 1000000;
+task('memelend:withdraw', 'Withdraw tokens from the pool')
   .addParam('asset', 'The address of the asset')
   .addParam('amount', 'The amount of the asset')
   .addParam('to', 'Withdrawal address')
@@ -51,9 +51,9 @@ task('intersect:withdraw', 'Withdraw tokens from the pool')
     console.log(txRes);
   });
 
-// npx hardhat --network neoX-testnet intersect:borrow --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --amount 100000 --mode 2 --referral 0 --behalf '';
-// npx hardhat --network neoX-testnet intersect:borrow --asset 0x646212B2cbdA223eE82C409F50d9EaA790Efa551 --amount 100000 --mode 2 --referral 0 --behalf '';
-task('intersect:borrow', 'Borrow tokens from the pool')
+// npx hardhat --network memecore-testnet memelend:borrow --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --amount 100000 --mode 2 --referral 0 --behalf '';
+// npx hardhat --network memecore-testnet memelend:borrow --asset 0x646212B2cbdA223eE82C409F50d9EaA790Efa551 --amount 100000 --mode 2 --referral 0 --behalf '';
+task('memelend:borrow', 'Borrow tokens from the pool')
   .addParam('asset', 'The address of the asset')
   .addParam('amount', 'The amount of the asset')
   .addParam('mode', 'Interest rate mode - enum NONE, STABLE, VARIABLE')
@@ -76,8 +76,8 @@ task('intersect:borrow', 'Borrow tokens from the pool')
     console.log(txRes);
   });
 
-// npx hardhat --network neoX-testnet intersect:repay --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --amount 100000 --mode 2 --behalf '';
-task('intersect:repay', 'Repay borrowed tokens to the pool')
+// npx hardhat --network memecore-testnet memelend:repay --asset 0xfd49bEe9a0015743f4f1ce493804b203eca76f29 --amount 100000 --mode 2 --behalf '';
+task('memelend:repay', 'Repay borrowed tokens to the pool')
   .addParam('asset', 'The address of the asset')
   .addParam('amount', 'The amount of the asset')
   .addParam('mode', 'Interest rate mode - enum NONE, STABLE, VARIABLE')
@@ -99,9 +99,9 @@ task('intersect:repay', 'Repay borrowed tokens to the pool')
     console.log(txRes);
   });
 
-// npx hardhat --show-stack-traces --network neoX-testnet intersect:repayWithATokens --asset 0x646212B2cbdA223eE82C409F50d9EaA790Efa551 --amount 4 --mode 2
+// npx hardhat --show-stack-traces --network memecore-testnet memelend:repayWithATokens --asset 0x646212B2cbdA223eE82C409F50d9EaA790Efa551 --amount 4 --mode 2
 // NOTE: you need to have ATokens ie already lending the asset of the debt you want to repay
-task('intersect:repayWithATokens', 'Repay borrowed tokens with aTokens to the pool')
+task('memelend:repayWithATokens', 'Repay borrowed tokens with aTokens to the pool')
   .addParam('asset', 'The address of the asset')
   .addParam('amount', 'The amount of the asset')
   .addParam('mode', 'Interest rate mode - enum NONE, STABLE, VARIABLE')
@@ -115,8 +115,8 @@ task('intersect:repayWithATokens', 'Repay borrowed tokens with aTokens to the po
   });
 
 // total150083513906
-// npx hardhat --network neoX-testnet intersect:liquidationCall --user '0x05e8EFDe59606B1aB4E1EefB992E99939117aD62' --collateral 0xc4463A7456b48500CC2a2B747C54deE0CB671B3c --debt 0x0fD30BA2Ff7bc336ddaBfb4a4fEE63D0b68b0327 --covering 1501016481796826376437 --atoken false
-task('intersect:liquidationCall', 'Liquidate a position')
+// npx hardhat --network memecore-testnet memelend:liquidationCall --user '0x05e8EFDe59606B1aB4E1EefB992E99939117aD62' --collateral 0xc4463A7456b48500CC2a2B747C54deE0CB671B3c --debt 0x0fD30BA2Ff7bc336ddaBfb4a4fEE63D0b68b0327 --covering 1501016481796826376437 --atoken false
+task('memelend:liquidationCall', 'Liquidate a position')
   .addParam('collateral', 'The address of the collateral asset')
   .addParam('debt', 'The address of the debt asset')
   .addParam('user', 'The address of the user')
@@ -133,8 +133,8 @@ task('intersect:liquidationCall', 'Liquidate a position')
     console.log(txRes);
   });
 
-// npx hardhat --network neoX-testnet intersect:getUserDetails --user '';
-task('intersect:getUserDetails', 'Get user configuration')
+// npx hardhat --network memecore-testnet memelend:getUserDetails --user '';
+task('memelend:getUserDetails', 'Get user configuration')
   .addParam('user', 'The address of the user')
   .setAction(async ({ user }, hre) => {
     const poolContract = await getPool(POOL_ADDRESS);
@@ -150,8 +150,8 @@ task('intersect:getUserDetails', 'Get user configuration')
     console.log('account config', userData);
   });
 
-// npx hardhat --network neoX-testnet intersect:getReserveFromPool --asset 0x6Ab8ce882d34eE414E09C8C8Fd4715c45592F923;
-task('intersect:getReserveFromPool', 'Get reserve data from the pool')
+// npx hardhat --network memecore-testnet memelend:getReserveFromPool --asset 0x6Ab8ce882d34eE414E09C8C8Fd4715c45592F923;
+task('memelend:getReserveFromPool', 'Get reserve data from the pool')
   .addParam('asset', 'The address of the asset')
   .setAction(async ({ asset }, hre) => {
     const poolContract = await getPool(POOL_ADDRESS);
@@ -160,8 +160,8 @@ task('intersect:getReserveFromPool', 'Get reserve data from the pool')
     console.log('reserve data', reserveData);
   });
 
-// npx hardhat --network neoX intersect:getReservesList;
-task('intersect:getReservesList', 'Get reserves list from the pool').setAction(async (hre) => {
+// npx hardhat --network memecore memelend:getReservesList;
+task('memelend:getReservesList', 'Get reserves list from the pool').setAction(async (hre) => {
   const poolContract = await getPool(POOL_ADDRESS);
 
   const reservesData = await poolContract.getReservesList();

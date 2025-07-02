@@ -20,8 +20,8 @@
   "main": "dist/helpers/index.js",
   "devDependencies": {
     "@aave/aave-token": "^1.0.4",
-    "@aave/core-v3": "git+https://github.com/IntersectLabs/intersect-core",
-    "@aave/periphery-v3": "git+https://github.com/IntersectLabs/intersect-periphery",
+    "@aave/core-v3": "git+https://github.com/MemelendLabs/memelend-core",
+    "@aave/periphery-v3": "git+https://github.com/MemelendLabs/memelend-periphery",
     "@aave/safety-module": "^1.0.3",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.5",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
@@ -75,7 +75,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/IntersectLabs/intersect-deploy"
+    "url": "git://github.com/MemelendLabs/memelend-deploy"
   },
   "dependencies": {
     "@openzeppelin/defender-relay-client": "^1.54.1"

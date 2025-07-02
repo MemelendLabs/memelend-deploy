@@ -17,7 +17,6 @@ import {
 // ----------------
 // POOL--SPECIFIC PARAMS
 // ----------------
-// TODO: add NEOx pool configuration
 export const AaveMarket: IAaveConfiguration = {
   ...CommonsConfig,
   MarketId: 'Ethereum Aave Market',

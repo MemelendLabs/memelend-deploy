@@ -2,9 +2,9 @@
 pragma solidity ^0.8.10;
 
 import {AggregatorV3Interface, AggregatorInterface} from "../dependencies/chainlink/AggregatorInterface.sol";
-import {Ownable} from "../dependencies/openzeppelin/contracts/Ownable.sol";
-import {SafeCast} from "../dependencies/openzeppelin/contracts/SafeCast.sol";
-import {SafeMath} from "../dependencies/openzeppelin/contracts/SafeMath.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {SafeCast} from "@openzeppelin/contracts/utils/math/SafeCast.sol";
+import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {ISupraSValueFeed} from "../dependencies/supra/ISupraSValueFeed.sol";
 
 /// @notice MockSupraAggregator is a mock contract for the SupraAggregator

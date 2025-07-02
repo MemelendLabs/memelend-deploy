@@ -15,7 +15,7 @@ import {
   eOptimismNetwork,
   ePolygonNetwork,
   eBaseNetwork,
-  eNeoXNetwork,
+  eMemeCoreNetwork,
 } from './helpers/types';
 import { DEFAULT_NAMED_ACCOUNTS } from './helpers/constants';
 
@@ -27,7 +27,7 @@ import '@nomicfoundation/hardhat-chai-matchers';
 import '@nomiclabs/hardhat-etherscan';
 
 const SKIP_LOAD = process.env.SKIP_LOAD === 'true';
-const TASK_FOLDERS = ['misc', 'market-registry', 'intersect'];
+const TASK_FOLDERS = ['misc', 'market-registry', 'memelend'];
 
 // Prevent to load tasks before compilation and typechain
 if (!SKIP_LOAD) {
@@ -92,8 +92,8 @@ export default {
     [eArbitrumNetwork.goerliNitro]: getCommonNetworkConfig(eArbitrumNetwork.goerliNitro, 421613),
     [eBaseNetwork.base]: getCommonNetworkConfig(eBaseNetwork.base, 8453),
     [eBaseNetwork.baseGoerli]: getCommonNetworkConfig(eBaseNetwork.baseGoerli, 84531),
-    [eNeoXNetwork.testnet]: getCommonNetworkConfig(eNeoXNetwork.testnet, 12227332),
-    [eNeoXNetwork.main]: getCommonNetworkConfig(eNeoXNetwork.main, 47763),
+    [eMemeCoreNetwork.testnet]: getCommonNetworkConfig(eMemeCoreNetwork.testnet, 43521),
+    [eMemeCoreNetwork.main]: getCommonNetworkConfig(eMemeCoreNetwork.main, 4352),
   },
   namedAccounts: {
     ...DEFAULT_NAMED_ACCOUNTS,
@@ -173,7 +173,7 @@ export default {
   deterministicDeployment: DETERMINISTIC_DEPLOYMENT ? DETERMINISTIC_FACTORIES : undefined,
   etherscan: {
     apiKey: {
-      [eNeoXNetwork.testnet]: 'notneeded',
+      [eMemeCoreNetwork.testnet]: 'notneeded',
     },
     customChains: [
       {
@@ -185,11 +185,11 @@ export default {
         },
       },
       {
-        network: eNeoXNetwork.testnet,
-        chainId: 12227332,
+        network: eMemeCoreNetwork.testnet,
+        chainId: 43521,
         urls: {
-          apiURL: 'https://neoxt4seed1.ngd.network',
-          browserURL: 'https://xt4scan.ngd.network/api',
+          apiURL: 'https://www.oklink.com/formicarium-testnet/api',
+          browserURL: 'https://www.oklink.com/formicarium-testnet',
         },
       },
     ],

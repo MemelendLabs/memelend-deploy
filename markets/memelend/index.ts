@@ -1,35 +1,32 @@
 import { ZERO_ADDRESS } from '../../helpers';
-import { IAaveConfiguration, eNeoXNetwork } from '../../helpers/types';
+import { IAaveConfiguration, eMemeCoreNetwork } from '../../helpers/types';
 
 import { CommonsConfig } from './commons';
 import {
-  strategySWTH,
-  strategyWGAS10,
-  strategyNEO,
   strategyUSDC,
   strategyUSDT,
   strategyWBTC,
   strategyWETH,
   strategywstETH,
   strategyDAI,
+  strategyWM,
 } from './reservesConfigs';
 
 // ----------------
 // POOL--SPECIFIC PARAMS
 // ----------------
 
-export const IntersectMarket: IAaveConfiguration = {
+// TODO: DKLOG: Change the market configurations
+export const MemelendMarket: IAaveConfiguration = {
   ...CommonsConfig,
-  MarketId: 'Intersect Market',
-  ATokenNamePrefix: 'Intersect',
-  StableDebtTokenNamePrefix: 'Intersect',
-  VariableDebtTokenNamePrefix: 'Intersect',
-  SymbolPrefix: 'In',
+  MarketId: 'Memelend Market',
+  ATokenNamePrefix: 'Memelend',
+  StableDebtTokenNamePrefix: 'Memelend',
+  VariableDebtTokenNamePrefix: 'Memelend',
+  SymbolPrefix: 'MLEND',
   ProviderId: 30,
   ReservesConfig: {
-    // SWTH: strategySWTH,
-    // NEO: strategyNEO,
-    WGAS10: strategyWGAS10,
+    WM: strategyWM,
     // USDC: strategyUSDC,
     // USDT: strategyUSDT,
     // WBTC: strategyWBTC,
@@ -39,10 +36,10 @@ export const IntersectMarket: IAaveConfiguration = {
   },
   ReserveAssets: {
     // Link the actual underlying assets, if not specified mintable asset will be deployed
-    [eNeoXNetwork.main]: {
-      WGAS10: '0xdE41591ED1f8ED1484aC2CD8ca0876428de60EfF',
+    [eMemeCoreNetwork.main]: {
+      WM: '0x653e645e3d81a72e71328Bc01A04002945E3ef7A',
     },
-    [eNeoXNetwork.testnet]: {
+    [eMemeCoreNetwork.testnet]: {
       DAI: '0xfd49bEe9a0015743f4f1ce493804b203eca76f29', // for testing purposes, already deployed on testnet
       LINK: ZERO_ADDRESS,
       USDC: ZERO_ADDRESS,
@@ -54,4 +51,4 @@ export const IntersectMarket: IAaveConfiguration = {
   },
 };
 
-export default IntersectMarket;
+export default MemelendMarket;

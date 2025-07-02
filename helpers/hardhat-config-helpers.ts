@@ -12,8 +12,9 @@ import {
   eFantomNetwork,
   eOptimismNetwork,
   eBaseNetwork,
-  eNeoXNetwork,
+  eMemeCoreNetwork,
 } from './types';
+import { emit } from 'process';
 
 require('dotenv').config();
 
@@ -97,8 +98,8 @@ export const NETWORKS_RPC_URL: iParamsPerNetwork<string> = {
   [eArbitrumNetwork.goerliNitro]: `https://goerli-rollup.arbitrum.io/rpc`,
   [eBaseNetwork.baseGoerli]: `https://goerli.base.org`,
   [eBaseNetwork.base]: `https://base-mainnet.g.alchemy.com/v2/${getAlchemyKey(eBaseNetwork.base)}`,
-  [eNeoXNetwork.testnet]: `https://neoxt4seed1.ngd.network`,
-  [eNeoXNetwork.main]: `https://mainnet-1.rpc.banelabs.org`,
+  [eMemeCoreNetwork.testnet]: `https://rpc.formicarium.memecore.net`,
+  [eMemeCoreNetwork.main]: `https://rpc.memecore.net/`,
 };
 
 export const LIVE_NETWORKS: iParamsPerNetwork<boolean> = {
@@ -110,14 +111,14 @@ export const LIVE_NETWORKS: iParamsPerNetwork<boolean> = {
   [eFantomNetwork.main]: true,
   [eOptimismNetwork.main]: true,
   [eBaseNetwork.base]: true,
-  [eNeoXNetwork.main]: true,
+  [eMemeCoreNetwork.main]: true,
 };
 
 const GAS_PRICE_PER_NET: iParamsPerNetwork<string | number> = {
   [eArbitrumNetwork.goerliNitro]: 100000001,
   [eBaseNetwork.baseGoerli]: 8000000000,
-  [eNeoXNetwork.testnet]: 40000000000, // this is required if there is a minGasTipCap or baseFee underprice for NeoX-testnet
-  [eNeoXNetwork.main]: 40000000000, // this is required if there is a minGasTipCap or baseFee underprice for NeoX-testnet
+  [eMemeCoreNetwork.main]: 40000000000, // this is required if there is a minGasTipCap or baseFee underprice
+  [eMemeCoreNetwork.testnet]: 40000000000, // this is required if there is a minGasTipCap or baseFee underprice
 };
 
 export const buildForkConfig = (): HardhatNetworkForkingUserConfig | undefined => {
@@ -166,8 +167,8 @@ const MNEMONICS: iParamsPerNetwork<string> = {
   [eArbitrumNetwork.arbitrumTestnet]: process.env.ARBITRUM_MNEMONIC,
   [ePolygonNetwork.mumbai]: process.env.POLYGON_MUMBAI_MNEMONIC,
   [ePolygonNetwork.polygon]: process.env.POLYGON_MNEMONIC,
-  [eNeoXNetwork.testnet]: process.env.NEOX_MNEMONIC,
-  [eNeoXNetwork.main]: process.env.SWITCHEO_MNEMONIC,
+  [eMemeCoreNetwork.main]: process.env.MNEMONIC,
+  [eMemeCoreNetwork.testnet]: process.env.MNEMONIC,
 };
 
 export const hardhatNetworkSettings = {

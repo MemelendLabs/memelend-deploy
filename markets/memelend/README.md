@@ -1,4 +1,4 @@
-# Deployment of Intersect Market on Mainnet
+# Deployment of Memelend Market on Mainnet
 
 ## Overview
 
@@ -6,8 +6,8 @@
 
 ### Market Configuration
 
-Use the deployment scripts to deploy the Intersect Market on Mainnet.
-Ensure that the follow files in the `markets/intersect` directory are updated with the correct details:
+Use the deployment scripts to deploy the Memelend Market on Mainnet.
+Ensure that the follow files in the `markets/memelend` directory are updated with the correct details:
 
 1. Index.ts
    Correct common market configuration parameters such as MarketId, token prefix, symbol prefix, reserve asset addresses (underlying asset address), reserve configuration (asset strategy).
@@ -29,37 +29,38 @@ Ensure that the follow files in the `markets/intersect` directory are updated wi
    Ensure stableBorrowRateEnabled is set to false as
 
 5. Constants.ts
-   Make sure that the POOL_ADMIN is updated to the correct address in the `markets/intersect/Constants.ts` file.
+   Make sure that the POOL_ADMIN is updated to the correct address in the `markets/memelend/Constants.ts` file.
 
 ````bash
 
-## Deployment of Intersect Aggregators
+## Deployment of Memelend Aggregators
+// TODO DKLOG: update the SUPRA_STORAGE address in the `tasks/memelend/marketOracle.ts` file
 
-Get the correct SUPRA STORAGE contract address and set it in the `tasks/intersect/marketOracle.ts` file.
+Get the correct SUPRA STORAGE contract address and set it in the `tasks/memelend/marketOracle.ts` file.
 
 ```bash
 const SUPRA_STORAGE = '0x58e158c74DF7Ad6396C0dcbadc4878faC9e93d57';
 ````
 
-1. Deploy the Intersect Aggregators by running the following command:
+1. Deploy the Memelend Aggregators by running the following command:
    Get the correct data feed index which can be found on the Supra website, https://docs.supra.com/oracles/data-feeds/data-feeds-index.
    Asset address is the address of the underlying asset that the aggregator will report the price for.
 
 ```bash
 // Deployment of aggregator
-npx hardhat --network neoX intersect:deploySupraUsdtAggregator --asset 0xdE41591ED1f8ED1484aC2CD8ca0876428de60EfF --index 260 --pair 'wGAS10_USDT'
+npx hardhat --network memecore memelend:deploySupraUsdtAggregator --asset 0xdE41591ED1f8ED1484aC2CD8ca0876428de60EfF --index 260 --pair 'WM_USDC'
 
 // Check that the aggregator returns correct values
-npx hardhat --network neoX intersect:querySupraUsdtAggregator --aggregator 0x6165353FC873328316d5299b86E855B74FD83389
+npx hardhat --network memecore memelend:querySupraUsdtAggregator --aggregator 0x6165353FC873328316d5299b86E855B74FD83389
 ```
 
-2. Linking of aggregator to Intersect Market Oracle
+2. Linking of aggregator to Memelend Market Oracle
 
 Asset is the address of the underlying asset that the aggregator will report the price for.
 Source is the aggregator address which the market oracle will query for the price.
 
 ```bash
-npx hardhat --network neoX intersect:addAssetSource --asset 0x1CE16390FD09040486221e912B87551E4e44Ab17 --source 0xD8b3379fF7DE5d874134783870eC9cdc0820D711;
+npx hardhat --network memecore memelend:addAssetSource --asset 0x1CE16390FD09040486221e912B87551E4e44Ab17 --source 0xD8b3379fF7DE5d874134783870eC9cdc0820D711;
 ```
 
 ## Common Errors

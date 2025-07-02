@@ -13,9 +13,9 @@ import { DefaultReserveInterestRateStrategy__factory, MintableERC20__factory } f
 const POOL_ADDRESS_PROVIDER = '0x37EC7775993A2Ac8197ed5173eDDC8FB0cb3f0b6';
 
 // USE THIS TO INITIALIZE A RESERVE
-const A_TOKEN_IMPL = '0x2363eFbb94b77E16DF25722E23E0d30f6DfCf5DA'; // AToken - Intersect
-const STABLE_TOKEN_IMPL = '0x4F7C055019De31A6DCF6Bb38661EF0083df3Feb4'; // StableDebtToken-Intersect
-const VARIABLE_TOKEN_IMPL = '0x7F7F3D9A85540678C082f904B989537f3838631a'; // VariableDebtToken-Intersect
+const A_TOKEN_IMPL = '0x2363eFbb94b77E16DF25722E23E0d30f6DfCf5DA'; // AToken - memelend
+const STABLE_TOKEN_IMPL = '0x4F7C055019De31A6DCF6Bb38661EF0083df3Feb4'; // StableDebtToken-memelend
+const VARIABLE_TOKEN_IMPL = '0x7F7F3D9A85540678C082f904B989537f3838631a'; // VariableDebtToken-memelend
 const UNDERLYING_ADDRESS = '0xc28736dc83f4fd43d6fb832Fd93c3eE7bB26828f';
 const UNDERLYING_NAME = 'NEO';
 const UNDERLYING_DECIMALS = '18';
@@ -34,15 +34,15 @@ const BORROWING_ENABLED = true;
 const STABLE_BORROWING_ENABLED = false; // this should always be false
 const FLASH_LOAN_ENABLED = true;
 
-const TOKEN_NAME = 'Intersect ' + UNDERLYING_NAME;
+const TOKEN_NAME = 'memelend ' + UNDERLYING_NAME;
 const TOKEN_SYMBOL = 'aIn' + UNDERLYING_NAME;
-const VAR_TOKEN_NAME = 'Intersect Variable Debt ' + UNDERLYING_NAME;
+const VAR_TOKEN_NAME = 'memelend Variable Debt ' + UNDERLYING_NAME;
 const VAR_TOKEN_SYMBOL = 'variableDebtIn' + UNDERLYING_NAME;
-const STABLE_TOKEN_NAME = 'Intersect Stable Debt ' + UNDERLYING_NAME;
+const STABLE_TOKEN_NAME = 'memelend Stable Debt ' + UNDERLYING_NAME;
 const STABLE_TOKEN_SYMBOL = 'stableDebtIn' + UNDERLYING_NAME;
 
-// npx hardhat --network neoX-testnet intersect:initReserve
-task('intersect:initReserve', 'Initialize reserve').setAction(async ({}, hre) => {
+// npx hardhat --network memecore-testnet memelend:initReserve
+task('memelend:initReserve', 'Initialize reserve').setAction(async ({}, hre) => {
   const poolAddressProvider = await getPoolAddressesProvider(POOL_ADDRESS_PROVIDER);
   const configuratorAddr = await poolAddressProvider.getPoolConfigurator();
   const configurator = await getPoolConfiguratorProxy(configuratorAddr);
@@ -107,8 +107,8 @@ interface InputParams {
 
 const HUNDRED_PERCENT_BPS = '10000';
 
-// npx hardhat --network neoX-testnet intersect:setReserveConfiguration
-task('intersect:setReserveConfiguration', 'Set reserve configuration for the asset').setAction(
+// npx hardhat --network memecore-testnet memelend:setReserveConfiguration
+task('memelend:setReserveConfiguration', 'Set reserve configuration for the asset').setAction(
   async ({}, hre) => {
     const ethers = hre.ethers;
 
@@ -194,7 +194,7 @@ task('intersect:setReserveConfiguration', 'Set reserve configuration for the ass
   }
 );
 
-// npx hardhat --network neoX-testnet intersect:deployRateStrategy
+// npx hardhat --network memecore-testnet memelend:deployRateStrategy
 task('itersect:deployRateStrategy', 'Deploy rate strategy').setAction(async ({}, hre) => {
   const ethers = hre.ethers;
   const [signer] = await ethers.getSigners();
@@ -259,8 +259,8 @@ interface ReserveInitParams {
 //   '0x97189Fa5B08A6F8Ceb2aa4CD4a45429dC0978eb7',
 // ];
 
-// npx hardhat --network neoX-testnet intersect:dropReserve --asset 0x97189Fa5B08A6F8Ceb2aa4CD4a45429dC0978eb7
-task('intersect:dropReserve', 'Drop reserve')
+// npx hardhat --network memecore-testnet memelend:dropReserve --asset 0x97189Fa5B08A6F8Ceb2aa4CD4a45429dC0978eb7
+task('memelend:dropReserve', 'Drop reserve')
   .addParam('asset', 'The address of the asset to drop')
   .setAction(async ({ asset }, hre) => {
     const poolAddressProvider = await getPoolAddressesProvider(POOL_ADDRESS_PROVIDER);

@@ -7,43 +7,7 @@ import {
   rateStrategyNoBorrow,
 } from './rateStrategies';
 
-export const strategySWTH: IReserveParams = {
-  strategy: rateStrategyNoBorrow,
-  baseLTVAsCollateral: '3500',
-  liquidationThreshold: '4000',
-  liquidationBonus: '11500',
-  liquidationProtocolFee: '1000',
-  borrowingEnabled: false,
-  stableBorrowRateEnabled: false,
-  flashLoanEnabled: false,
-  reserveDecimals: '8',
-  aTokenImpl: eContractid.AToken,
-  reserveFactor: '1000',
-  supplyCap: '1000000000',
-  borrowCap: '0',
-  debtCeiling: '0',
-  borrowableIsolation: false,
-};
-
-export const strategyNEO: IReserveParams = {
-  strategy: rateStrategyNeutralTen,
-  baseLTVAsCollateral: '5000',
-  liquidationThreshold: '6000',
-  liquidationBonus: '10300',
-  liquidationProtocolFee: '1000',
-  borrowingEnabled: true,
-  stableBorrowRateEnabled: false,
-  flashLoanEnabled: true,
-  reserveDecimals: '8',
-  aTokenImpl: eContractid.AToken,
-  reserveFactor: '1000',
-  supplyCap: '100000',
-  borrowCap: '100000',
-  debtCeiling: '0',
-  borrowableIsolation: false,
-};
-
-export const strategyWGAS10: IReserveParams = {
+export const strategyWM: IReserveParams = {
   strategy: rateStrategyNeutralTen,
   baseLTVAsCollateral: '5000',
   liquidationThreshold: '6000',

@@ -19,14 +19,13 @@ export type eNetwork =
   | eOptimismNetwork
   | eTenderlyNetwork
   | eBaseNetwork
-  | eNeoXNetwork;
+  | eMemeCoreNetwork;
 
 type eTenderlyNetwork = 'tenderly';
 
-// TODO: update to the correct values
-export enum eNeoXNetwork {
-  main = 'neoX',
-  testnet = 'neoX-testnet',
+export enum eMemeCoreNetwork {
+  main = 'memecore',
+  testnet = 'memecore-testnet',
 }
 
 export enum eFantomNetwork {

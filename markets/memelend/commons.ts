@@ -1,4 +1,4 @@
-import { eNeoXNetwork } from './../../helpers/types';
+import { eMemeCoreNetwork } from '../../helpers/types';
 import { ZERO_ADDRESS } from '../../helpers/constants';
 import { ICommonConfiguration } from '../../helpers/types';
 import {
@@ -12,22 +12,22 @@ import {
 // ----------------
 
 export const CommonsConfig: ICommonConfiguration = {
-  MarketId: 'Commons Intersect Market',
-  ATokenNamePrefix: 'Intersect',
-  StableDebtTokenNamePrefix: 'Intersect',
-  VariableDebtTokenNamePrefix: 'Intersect',
-  SymbolPrefix: 'In',
+  MarketId: 'Commons Memelend Market',
+  ATokenNamePrefix: 'Memelend',
+  StableDebtTokenNamePrefix: 'Memelend',
+  VariableDebtTokenNamePrefix: 'Memelend',
+  SymbolPrefix: 'MLEND',
   ProviderId: 8080,
   OracleQuoteCurrencyAddress: ZERO_ADDRESS,
-  OracleQuoteCurrency: 'USDT',
+  OracleQuoteCurrency: 'USDC',
   OracleQuoteUnit: '8',
-  WrappedNativeTokenSymbol: 'WGAS10',
+  WrappedNativeTokenSymbol: 'WM',
   ChainlinkAggregator: {
     // TODO: Add Chainlink Aggregator addresses
-    [eNeoXNetwork.main]: {
-      WGAS10: '0xde41591ed1f8ed1484ac2cd8ca0876428de60eff',
+    [eMemeCoreNetwork.main]: {
+      WM: '0xde41591ed1f8ed1484ac2cd8ca0876428de60eff',
     },
-    [eNeoXNetwork.testnet]: {},
+    [eMemeCoreNetwork.testnet]: {},
   },
   ReserveFactorTreasuryAddress: {},
   FallbackOracle: {},
@@ -52,7 +52,7 @@ export const CommonsConfig: ICommonConfiguration = {
     // },
   },
   L2PoolEnabled: {
-    [eNeoXNetwork.testnet]: true,
+    [eMemeCoreNetwork.testnet]: true,
   },
   ParaswapRegistry: {},
   FlashLoanPremiums: {

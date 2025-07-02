@@ -2,12 +2,12 @@
 pragma solidity ^0.8.10;
 
 import {AggregatorV3Interface, AggregatorInterface} from "../dependencies/chainlink/AggregatorInterface.sol";
-import {Ownable} from "../dependencies/openzeppelin/contracts/Ownable.sol";
-import {SafeCast} from "../dependencies/openzeppelin/contracts/SafeCast.sol";
-import {SafeMath} from "../dependencies/openzeppelin/contracts/SafeMath.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {SafeCast} from "@openzeppelin/contracts/utils/math/SafeCast.sol";
+import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {ISupraSValueFeed} from "../dependencies/supra/ISupraSValueFeed.sol";
 
-/// @notice SupraUsdtAggregator is a contract implementing Chainlink aggregator interface for Intersect to obtain Supra oracle data
+/// @notice SupraUsdtAggregator is a contract implementing Chainlink aggregator interface for Memelend to obtain Supra oracle data
 contract SupraUsdtAggregator is Ownable, AggregatorInterface {
     /// @notice decimals of the data from the aggregator
     uint8 public decimals;

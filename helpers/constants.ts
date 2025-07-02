@@ -6,7 +6,7 @@ import {
   eEthereumNetwork,
   eFantomNetwork,
   eHarmonyNetwork,
-  eNeoXNetwork,
+  eMemeCoreNetwork,
   eOptimismNetwork,
   ePolygonNetwork,
 } from './types';
@@ -46,7 +46,8 @@ export const WRAPPED_NATIVE_TOKEN_PER_NETWORK: { [network: string]: string } = {
   [eFantomNetwork.main]: '0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83',
   [eHarmonyNetwork.main]: '0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a',
   [ePolygonNetwork.polygon]: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
-  [eNeoXNetwork.main]: '0xdE41591ED1f8ED1484aC2CD8ca0876428de60EfF',
+  // TODO DKLOG: find wrapped native token address
+  [eMemeCoreNetwork.main]: '0x653e645e3d81a72e71328Bc01A04002945E3ef7A',
 };
 
 export const ZERO_BYTES_32 = '0x0000000000000000000000000000000000000000000000000000000000000000';
@@ -105,8 +106,9 @@ export const chainlinkAggregatorProxy: Record<string, string> = {
   goerli: '0x60E4B131f0F219c72b0346675283E73888e4AB24',
   [eArbitrumNetwork.goerliNitro]: '0xC09e69E79106861dF5d289dA88349f10e2dc6b5C',
   [eEthereumNetwork.sepolia]: '0x6c60d915c7a646860dba836ffcb7f112b6cfdc76',
-  [eNeoXNetwork.testnet]: '0xf82aeeD598833B428352A47dCFb2C1F90C7A379F',
-  [eNeoXNetwork.main]: '0xB28F39BDba7feD13c7e5FB050881bfA6b49eBf3b',
+  // TODO DKLOG: deploy aggregator and add address
+  [eMemeCoreNetwork.testnet]: '0xf82aeeD598833B428352A47dCFb2C1F90C7A379F',
+  [eMemeCoreNetwork.main]: '0xB28F39BDba7feD13c7e5FB050881bfA6b49eBf3b',
 };
 
 // TODO: This needs to be sets
@@ -131,8 +133,9 @@ export const chainlinkEthUsdAggregatorProxy: Record<string, string> = {
   goerli: '0x60E4B131f0F219c72b0346675283E73888e4AB24',
   [eArbitrumNetwork.goerliNitro]: '0xC09e69E79106861dF5d289dA88349f10e2dc6b5C',
   [eEthereumNetwork.sepolia]: '0x6c60d915c7a646860dba836ffcb7f112b6cfdc76',
-  [eNeoXNetwork.testnet]: '0xf82aeeD598833B428352A47dCFb2C1F90C7A379F',
-  [eNeoXNetwork.main]: '0xB28F39BDba7feD13c7e5FB050881bfA6b49eBf3b',
+  // TODO DKLOG: deploy aggregator and add address
+  [eMemeCoreNetwork.testnet]: '0xf82aeeD598833B428352A47dCFb2C1F90C7A379F',
+  [eMemeCoreNetwork.main]: '0xB28F39BDba7feD13c7e5FB050881bfA6b49eBf3b',
 };
 
 export const ETHEREUM_SHORT_EXECUTOR = '0xEE56e2B3D491590B5b31738cC34d5232F378a8D5';
@@ -151,7 +154,8 @@ export const POOL_ADMIN: Record<string, string> = {
   [eBaseNetwork.base]: '0xA9F30e6ED4098e9439B2ac8aEA2d3fc26BcEbb45',
   [eBaseNetwork.baseGoerli]: '0xA9F30e6ED4098e9439B2ac8aEA2d3fc26BcEbb45',
   [eEthereumNetwork.tenderly]: ETHEREUM_SHORT_EXECUTOR,
-  [eNeoXNetwork.main]: '0xDF1c818d3Ee61E8276653C44C8f8789D69980972',
+  // TODO DKLOG: get admin and set address
+  [eMemeCoreNetwork.main]: '0xDF1c818d3Ee61E8276653C44C8f8789D69980972',
 };
 
 export const EMERGENCY_ADMIN: Record<string, string> = {
