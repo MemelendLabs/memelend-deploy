@@ -5,6 +5,8 @@ import {
   VariableDebtToken__factory,
   WrappedTokenGatewayV3__factory,
   waitForTx,
+  MintableERC20__factory,
+  MockChainlinkAggregator__factory,
 } from '../../helpers';
 import { ZERO_ADDRESS } from '../../helpers/constants';
 
@@ -92,5 +94,83 @@ task('memelend:deployWrappedTokenGateway', 'Deploy wrapped token gateway').setAc
 
     await gateway.deployed();
     console.log(`Deployed wrapped token gateway at ${gateway.address}`);
+  }
+);
+
+// npx hardhat --network memecore-testnet memelend:deployTestToken
+task('memelend:deployTestToken', 'Deploy test token').setAction(async ({}, hre) => {
+  const ethers = hre.ethers;
+  const [signer] = await ethers.getSigners();
+  console.log(signer.address);
+
+  const tokenFactory = new MintableERC20__factory(signer);
+  const token = await tokenFactory.deploy('TestToken', 'TEST', 18);
+
+  await token.deployed();
+  console.log(`Deployed test token at ${token.address}`);
+});
+
+// npx hardhat --network memecore-testnet memelend:deployMockChainlinkAggregator
+task('memelend:deployMockChainlinkAggregator', 'Deploy mock chainlink aggregator').setAction(
+  async ({}, hre) => {
+    const ethers = hre.ethers;
+    const [signer] = await ethers.getSigners();
+
+    const oracleFactor = new MockChainlinkAggregator__factory(signer);
+
+    const tokenAddress = '0x6165353FC873328316d5299b86E855B74FD83389';
+    const price = BigInt(1e18);
+    const oracle = await oracleFactor.deploy(tokenAddress, price, 18, 'TEST/USD');
+    await oracle.deployed();
+    const checkPrice = await oracle.latestAnswer();
+
+    console.log(`Deployed test token oracle at ${oracle.address}`);
+    console.log(`Token price is ${checkPrice.toString()}`);
+  }
+);
+
+// npx hardhat --network memecore-testnet memelend:deployTestTokenWithOracle --token-name "Wrapped M" --token-symbol "VM" --token-decimals 18 --token-price 100e8
+task('memelend:deployTestTokenWithOracle', 'Deploy test token with oracle')
+  .addParam('tokenName', 'The name of the token')
+  .addParam('tokenSymbol', 'The symbol of the token')
+  .addParam('tokenDecimals', 'The decimal of the token')
+  .addParam('tokenPrice', 'The price of the token')
+  .setAction(async ({ tokenName, tokenPrice, tokenSymbol, tokenDecimals }, hre) => {
+    const ethers = hre.ethers;
+    const [signer] = await ethers.getSigners();
+
+    const decimals = BigInt(tokenDecimals);
+    const tokenFactory = new MintableERC20__factory(signer);
+    const token = await tokenFactory.deploy(tokenName, tokenSymbol, decimals);
+    await token.deployed();
+    console.log(`Deployed test token at ${token.address}`);
+
+    const oracleFactory = new MockChainlinkAggregator__factory(signer);
+    const price = BigInt(tokenPrice);
+    const pair = `${tokenSymbol}/USD`;
+    const oracle = await oracleFactory.deploy(token.address, price, decimals, pair);
+    await oracle.deployed();
+    const checkPrice = await oracle.latestAnswer();
+
+    console.log(`Deployed test token oracle at ${oracle.address}`);
+    console.log(`Token price is ${checkPrice.toString()}`);
+  });
+
+// npx hardhat --network memecore-testnet memelend:checkChainlinkAggregator
+task('memelend:checkChainlinkAggregator', 'Check price of mock chainlink aggregator').setAction(
+  async ({}, hre) => {
+    const ethers = hre.ethers;
+    const [signer] = await ethers.getSigners();
+
+    const oracleFactory = new MockChainlinkAggregator__factory();
+
+    const aggregator = '0xB28F39BDba7feD13c7e5FB050881bfA6b49eBf3b';
+    const oracle = oracleFactory.connect(signer).attach(aggregator);
+
+    const checkPrice = await oracle.latestAnswer();
+    const pair = await oracle.tokenPair();
+
+    console.log(`Token pair is ${pair}`);
+    console.log(`Token price is ${checkPrice.toString()}`);
   }
 );

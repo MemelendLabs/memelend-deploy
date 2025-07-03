@@ -7,7 +7,7 @@
 ### Market Configuration
 
 Use the deployment scripts to deploy the Memelend Market on Mainnet.
-Ensure that the follow files in the `markets/memelend` directory are updated with the correct details:
+Ensure that the following files in the `markets/memelend` directory are updated with the correct details:
 
 1. Index.ts
    Correct common market configuration parameters such as MarketId, token prefix, symbol prefix, reserve asset addresses (underlying asset address), reserve configuration (asset strategy).
@@ -26,7 +26,7 @@ Ensure that the follow files in the `markets/memelend` directory are updated wit
 
 4. ReservesConfig.ts
    Add in the reserves to be listed with the associated strategy.
-   Ensure stableBorrowRateEnabled is set to false as
+   Ensure stableBorrowRateEnabled is set to false as it is not supported.
 
 5. Constants.ts
    Make sure that the POOL_ADMIN is updated to the correct address in the `markets/memelend/Constants.ts` file.
@@ -34,8 +34,7 @@ Ensure that the follow files in the `markets/memelend` directory are updated wit
 ````bash
 
 ## Deployment of Memelend Aggregators
-// TODO DKLOG: update the SUPRA_STORAGE address in the `tasks/memelend/marketOracle.ts` file
-
+If using
 Get the correct SUPRA STORAGE contract address and set it in the `tasks/memelend/marketOracle.ts` file.
 
 ```bash

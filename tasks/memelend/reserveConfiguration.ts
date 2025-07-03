@@ -195,7 +195,7 @@ task('memelend:setReserveConfiguration', 'Set reserve configuration for the asse
 );
 
 // npx hardhat --network memecore-testnet memelend:deployRateStrategy
-task('itersect:deployRateStrategy', 'Deploy rate strategy').setAction(async ({}, hre) => {
+task('memelend:deployRateStrategy', 'Deploy rate strategy').setAction(async ({}, hre) => {
   const ethers = hre.ethers;
   const [signer] = await ethers.getSigners();
 

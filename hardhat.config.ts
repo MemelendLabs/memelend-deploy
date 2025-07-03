@@ -172,9 +172,7 @@ export default {
   },
   deterministicDeployment: DETERMINISTIC_DEPLOYMENT ? DETERMINISTIC_FACTORIES : undefined,
   etherscan: {
-    apiKey: {
-      [eMemeCoreNetwork.testnet]: 'notneeded',
-    },
+    apiKey: 'I2XJGBUF25XQBFA28S9ZC3H85KYGU1GSKS',
     customChains: [
       {
         network: eBaseNetwork.base,
@@ -188,8 +186,11 @@ export default {
         network: eMemeCoreNetwork.testnet,
         chainId: 43521,
         urls: {
-          apiURL: 'https://www.oklink.com/formicarium-testnet/api',
-          browserURL: 'https://www.oklink.com/formicarium-testnet',
+          apiURL: 'https://api.etherscan.io/v2/api?chainid=43521',
+          browserURL: 'https://formicarium.memecorescan.io',
+          // apiURL:
+          //   'https://www.oklink.com/formicarium-testnet/api/v5/explorer/contract/verify-source-code',
+          // browserURL: 'https://www.oklink.com/formicarium-testnet',
         },
       },
     ],

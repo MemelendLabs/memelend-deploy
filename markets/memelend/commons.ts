@@ -19,15 +19,20 @@ export const CommonsConfig: ICommonConfiguration = {
   SymbolPrefix: 'MLEND',
   ProviderId: 8080,
   OracleQuoteCurrencyAddress: ZERO_ADDRESS,
-  OracleQuoteCurrency: 'USDC',
-  OracleQuoteUnit: '8',
+  OracleQuoteCurrency: 'USD',
+  OracleQuoteUnit: '18',
   WrappedNativeTokenSymbol: 'WM',
   ChainlinkAggregator: {
     // TODO: Add Chainlink Aggregator addresses
     [eMemeCoreNetwork.main]: {
       WM: '0xde41591ed1f8ed1484ac2cd8ca0876428de60eff',
     },
-    [eMemeCoreNetwork.testnet]: {},
+    [eMemeCoreNetwork.testnet]: {
+      WM: '0x477949114F685B2290026652C03753dd9Ef00B4f',
+      TEST: '0xB28F39BDba7feD13c7e5FB050881bfA6b49eBf3b',
+      WBTC: '0x1A54a99BEC922b5Da9C254AAa1E450121D77fA44',
+      USDC: '0xdc1528FF2Da97152aa6C41B86704BF18f8cA0a09',
+    },
   },
   ReserveFactorTreasuryAddress: {},
   FallbackOracle: {},

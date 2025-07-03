@@ -117,8 +117,8 @@ export const LIVE_NETWORKS: iParamsPerNetwork<boolean> = {
 const GAS_PRICE_PER_NET: iParamsPerNetwork<string | number> = {
   [eArbitrumNetwork.goerliNitro]: 100000001,
   [eBaseNetwork.baseGoerli]: 8000000000,
-  [eMemeCoreNetwork.main]: 40000000000, // this is required if there is a minGasTipCap or baseFee underprice
-  [eMemeCoreNetwork.testnet]: 40000000000, // this is required if there is a minGasTipCap or baseFee underprice
+  [eMemeCoreNetwork.main]: 1600000000000, // this is required if there is a minGasTipCap or baseFee underprice
+  [eMemeCoreNetwork.testnet]: 1600000000000, // this is required if there is a minGasTipCap or baseFee underprice
 };
 
 export const buildForkConfig = (): HardhatNetworkForkingUserConfig | undefined => {

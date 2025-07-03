@@ -48,10 +48,12 @@ export const WRAPPED_NATIVE_TOKEN_PER_NETWORK: { [network: string]: string } = {
   [ePolygonNetwork.polygon]: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
   // TODO DKLOG: find wrapped native token address
   [eMemeCoreNetwork.main]: '0x653e645e3d81a72e71328Bc01A04002945E3ef7A',
+  [eMemeCoreNetwork.testnet]: '0x8c267Ca5A02Ce70F61f64f9d9Dcc31D4F4f1C825',
 };
 
 export const ZERO_BYTES_32 = '0x0000000000000000000000000000000000000000000000000000000000000000';
 
+// This is used to set up aggregators for testnets
 export const MOCK_CHAINLINK_AGGREGATORS_PRICES: { [key: string]: string } = {
   AAVE: parseUnits('300', 8).toString(),
   WETH: parseUnits('4000', 8).toString(),
@@ -59,7 +61,7 @@ export const MOCK_CHAINLINK_AGGREGATORS_PRICES: { [key: string]: string } = {
   DAI: parseUnits('1', 8).toString(),
   USDC: parseUnits('1', 8).toString(),
   USDT: parseUnits('1', 8).toString(),
-  WBTC: parseUnits('60000', 8).toString(),
+  WBTC: parseUnits('100000', 8).toString(),
   USD: parseUnits('1', 8).toString(),
   LINK: parseUnits('30', 8).toString(),
   CRV: parseUnits('6', 8).toString(),
@@ -77,13 +79,11 @@ export const MOCK_CHAINLINK_AGGREGATORS_PRICES: { [key: string]: string } = {
   AGEUR: parseUnits('1.126', 8).toString(),
   JEUR: parseUnits('1.126', 8).toString(),
   DPI: parseUnits('149', 8).toString(),
-  CBETH: parseUnits('4000', 8).toString(),
-  SWTH: parseUnits('0.004', 8).toString(),
-  WSTETH: parseUnits('2000', 8).toString(),
-  WGAS: parseUnits('3', 8).toString(),
-  NEO: parseUnits('8', 8).toString(),
+  WM: parseUnits('100', 18).toString(),
+  TEST: parseUnits('10', 18).toString(),
 };
 
+// Native token aggregator address
 // TODO: This needs to be set
 export const chainlinkAggregatorProxy: Record<string, string> = {
   main: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419',
@@ -107,7 +107,7 @@ export const chainlinkAggregatorProxy: Record<string, string> = {
   [eArbitrumNetwork.goerliNitro]: '0xC09e69E79106861dF5d289dA88349f10e2dc6b5C',
   [eEthereumNetwork.sepolia]: '0x6c60d915c7a646860dba836ffcb7f112b6cfdc76',
   // TODO DKLOG: deploy aggregator and add address
-  [eMemeCoreNetwork.testnet]: '0xf82aeeD598833B428352A47dCFb2C1F90C7A379F',
+  [eMemeCoreNetwork.testnet]: '0x477949114F685B2290026652C03753dd9Ef00B4f',
   [eMemeCoreNetwork.main]: '0xB28F39BDba7feD13c7e5FB050881bfA6b49eBf3b',
 };
 
@@ -134,7 +134,7 @@ export const chainlinkEthUsdAggregatorProxy: Record<string, string> = {
   [eArbitrumNetwork.goerliNitro]: '0xC09e69E79106861dF5d289dA88349f10e2dc6b5C',
   [eEthereumNetwork.sepolia]: '0x6c60d915c7a646860dba836ffcb7f112b6cfdc76',
   // TODO DKLOG: deploy aggregator and add address
-  [eMemeCoreNetwork.testnet]: '0xf82aeeD598833B428352A47dCFb2C1F90C7A379F',
+  [eMemeCoreNetwork.testnet]: '0x477949114F685B2290026652C03753dd9Ef00B4f',
   [eMemeCoreNetwork.main]: '0xB28F39BDba7feD13c7e5FB050881bfA6b49eBf3b',
 };
 
