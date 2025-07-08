@@ -118,9 +118,9 @@ task('memelend:deployMockChainlinkAggregator', 'Deploy mock chainlink aggregator
 
     const oracleFactor = new MockChainlinkAggregator__factory(signer);
 
-    const tokenAddress = '0x6165353FC873328316d5299b86E855B74FD83389';
-    const price = BigInt(1e18);
-    const oracle = await oracleFactor.deploy(tokenAddress, price, 18, 'TEST/USD');
+    const tokenAddress = '0x9B12F439c5fcF663db59279608E39Dc3734ee1E8';
+    const price = BigInt(1e6);
+    const oracle = await oracleFactor.deploy(tokenAddress, price, 6, 'USDT/USD');
     await oracle.deployed();
     const checkPrice = await oracle.latestAnswer();
 

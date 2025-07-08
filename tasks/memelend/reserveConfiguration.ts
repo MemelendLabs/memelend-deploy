@@ -10,18 +10,18 @@ import {
 } from '../../helpers';
 import { DefaultReserveInterestRateStrategy__factory, MintableERC20__factory } from '../../helpers';
 
-const POOL_ADDRESS_PROVIDER = '0x37EC7775993A2Ac8197ed5173eDDC8FB0cb3f0b6';
+const POOL_ADDRESS_PROVIDER = '0xfa512d40F96449E2c6Ee304aFb4951e900d1dEB8';
 
 // USE THIS TO INITIALIZE A RESERVE
-const A_TOKEN_IMPL = '0x2363eFbb94b77E16DF25722E23E0d30f6DfCf5DA'; // AToken - memelend
-const STABLE_TOKEN_IMPL = '0x4F7C055019De31A6DCF6Bb38661EF0083df3Feb4'; // StableDebtToken-memelend
-const VARIABLE_TOKEN_IMPL = '0x7F7F3D9A85540678C082f904B989537f3838631a'; // VariableDebtToken-memelend
-const UNDERLYING_ADDRESS = '0xc28736dc83f4fd43d6fb832Fd93c3eE7bB26828f';
-const UNDERLYING_NAME = 'NEO';
-const UNDERLYING_DECIMALS = '18';
-const TREASURY_ADDRESS = '0x35e2d4fe70bbe3cBf3De0B270957BdCBC8f69285'; // Treasury proxy
-const INCENTIVES_ADDRESS = '0x19789F2043C9845bcE7fb71B2358763247d32B61'; // Incentives proxy
-const STRATEGY_ADDRESS = '0xB503A122A40eb57FD28d545fd19d0111B060d896'; // Rate strategy folling the one listed in the sheets
+const A_TOKEN_IMPL = '0x2ac7fAF969FcbFE85c3fE58953f68696f736bC8f'; // AToken - memelend
+const STABLE_TOKEN_IMPL = '0xb6b659822D69c0A554E356263DCc2Df66c4Ed260'; // StableDebtToken-memelend
+const VARIABLE_TOKEN_IMPL = '0xc10BFf6134440561bd7603884B2a60895ef91fDa'; // VariableDebtToken-memelend
+const UNDERLYING_ADDRESS = '0x9B12F439c5fcF663db59279608E39Dc3734ee1E8';
+const UNDERLYING_NAME = 'USDT';
+const UNDERLYING_DECIMALS = '6';
+const TREASURY_ADDRESS = '0x372671079CF83E49dFe4D93899B67D9694Fb17e8'; // Treasury proxy
+const INCENTIVES_ADDRESS = '0xdA11FC4622F86cc7924Ae95022F7fD66BbD14ab6'; // Incentives proxy
+const STRATEGY_ADDRESS = '0xb45A5c3a452F3D13538cCfF2D634FA54389F2cB3'; // Rate strategy folling the one listed in the sheets
 
 // NOTE: All configuration params are in bps, and string the numbers
 const LTV = '5000';
@@ -34,12 +34,12 @@ const BORROWING_ENABLED = true;
 const STABLE_BORROWING_ENABLED = false; // this should always be false
 const FLASH_LOAN_ENABLED = true;
 
-const TOKEN_NAME = 'memelend ' + UNDERLYING_NAME;
-const TOKEN_SYMBOL = 'aIn' + UNDERLYING_NAME;
-const VAR_TOKEN_NAME = 'memelend Variable Debt ' + UNDERLYING_NAME;
-const VAR_TOKEN_SYMBOL = 'variableDebtIn' + UNDERLYING_NAME;
-const STABLE_TOKEN_NAME = 'memelend Stable Debt ' + UNDERLYING_NAME;
-const STABLE_TOKEN_SYMBOL = 'stableDebtIn' + UNDERLYING_NAME;
+const TOKEN_NAME = 'Memelend ' + UNDERLYING_NAME;
+const TOKEN_SYMBOL = 'MLEND' + UNDERLYING_NAME;
+const VAR_TOKEN_NAME = 'Memelend Variable Debt ' + UNDERLYING_NAME;
+const VAR_TOKEN_SYMBOL = 'variableDebtMLEND' + UNDERLYING_NAME;
+const STABLE_TOKEN_NAME = 'Memelend Stable Debt ' + UNDERLYING_NAME;
+const STABLE_TOKEN_SYMBOL = 'stableDebtMLEND' + UNDERLYING_NAME;
 
 // npx hardhat --network memecore-testnet memelend:initReserve
 task('memelend:initReserve', 'Initialize reserve').setAction(async ({}, hre) => {
@@ -49,20 +49,20 @@ task('memelend:initReserve', 'Initialize reserve').setAction(async ({}, hre) => 
 
   // if the underlying is not specified it needs to be deployed this is mainely for testing
   let underlyingAsset = UNDERLYING_ADDRESS;
-  // if (underlyingAsset == '') {
-  //   console.log('deploying underlying asset');
-  //   const ethers = hre.ethers;
-  //   const [signer] = await ethers.getSigners();
-  //   const tokenFactory = new MintableERC20__factory(signer);
-  //   const tokenInstance = await tokenFactory.deploy(
-  //     UNDERLYING_NAME,
-  //     UNDERLYING_NAME,
-  //     UNDERLYING_DECIMALS
-  //   );
-  //   await tokenInstance.deployed();
-  //   underlyingAsset = tokenInstance.address;
-  //   console.log(`deployed underlying asset at ${underlyingAsset}`);
-  // }
+  if (underlyingAsset == '') {
+    console.log('deploying underlying asset');
+    const ethers = hre.ethers;
+    const [signer] = await ethers.getSigners();
+    const tokenFactory = new MintableERC20__factory(signer);
+    const tokenInstance = await tokenFactory.deploy(
+      UNDERLYING_NAME,
+      UNDERLYING_NAME,
+      UNDERLYING_DECIMALS
+    );
+    await tokenInstance.deployed();
+    underlyingAsset = tokenInstance.address;
+    console.log(`deployed underlying asset at ${underlyingAsset}`);
+  }
 
   const reserveParams: ReserveInitParams = {
     aTokenImpl: A_TOKEN_IMPL,

@@ -24,7 +24,7 @@ import { MARKET_NAME } from '../../helpers/env';
 import { eNetwork, ICommonConfiguration } from '../../helpers/types';
 import { parseUnits } from 'ethers/lib/utils';
 
-const ORACLE_ADDRESS = '0x186dfb689CA6E4F85716B7a187a25cA4d2E6fBaA'; // mainnet memecore
+const ORACLE_ADDRESS = '0x0b5e6F489728114159B4E3264BcD4D37AdCf3930'; // mainnet memecore
 const SUPRA_STORAGE = '0x58e158c74DF7Ad6396C0dcbadc4878faC9e93d57';
 
 // ========== Aave Oracle Tasks ==========
@@ -44,7 +44,7 @@ task('memelend:getSourceOfAsset', 'Get source of asset for the pricing')
     console.log(`Source of ${asset} is ${res}`);
   });
 
-// npx hardhat --network memecore-testnet memelend:setAssetSources --asset 0xc28736dc83f4fd43d6fb832Fd93c3eE7bB26828f --source 0xfCd51732168F47686fC8E1422c80D40438fC84cC;
+// npx hardhat --network memecore-testnet memelend:setAssetSources --asset 0x9B12F439c5fcF663db59279608E39Dc3734ee1E8 --source 0x15462705fA4D3258D8ed9B8dF198cd77D5ae38a5;
 task('memelend:setAssetSources', 'Add asset source to the market')
   .addParam('asset', 'The address of asset')
   .addParam('source', 'The address of source CLA')
